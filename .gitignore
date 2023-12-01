@@ -1,0 +1,64 @@
+# .NET Core
+[Bb]in/
+[Oo]bj/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+out/
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio Code
+.vscode/
+.history/
+
+# Visual Studio
+.vs/
+*.opendb
+*.dbmdl
+
+# Rider
+.idea/
+
+# User-specific files
+*.swp
+*.*swp
+*.swo
+*.tmp
+*.*~
+*.lock.json
+
+# Node in React App
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build results
+[Dd]ist/
+[Tt]arget/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Misc
+*.log
+*.sqlite
+*.tar.gz
+*.zip
+*.gz
+*.rar
+*.7z

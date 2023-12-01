@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\langemaire\\Documents\\GitHub\\WPR\\backend\\backend.csproj": {}
+    "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\langemaire\\Documents\\GitHub\\WPR\\backend\\backend.csproj": {
+    "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\langemaire\\Documents\\GitHub\\WPR\\backend\\backend.csproj",
+        "projectUniqueName": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\langemaire\\Documents\\GitHub\\WPR\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\langemaire\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\langemaire\\Documents\\GitHub\\WPR\\backend\\obj\\",
+        "projectPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
+        "packagesPath": "/Users/bramsteenkamp/.nuget/packages/",
+        "outputPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\langemaire\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/bramsteenkamp/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -45,6 +45,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -90,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.403/RuntimeIdentifierGraph.json"
         }
       }
     }
