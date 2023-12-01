@@ -1,8 +1,10 @@
-public class Bedrijf
+public class BusinessUser : ApplicationUser
 {
-    public int ID { get; set; }
-    public string Naam { get; set; }
-    public string Locatie { get; set; }
+    public string CompanyName { get; set; }
+    public string Location { get; set; }
     public string WebsiteURL { get; set; }
-    public string Contactinformatie { get; set; }
+    public string ContactInfo { get; set; }
+
+    // Navigation properties
+    public virtual ICollection<Research> Researches { get; set; }
 }
