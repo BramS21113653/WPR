@@ -556,3 +556,5 @@ C:/Users/langemaire/Documents/GitHub/WPR/backend/obj/Debug/net7.0/ref/backend.dl
 /Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/Debug/net7.0/backend.csproj.CopyComplete
 /Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/Debug/net7.0/backend.genruntimeconfig.cache
 /Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/Debug/net7.0/ref/backend.dll
+/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/bin/Debug/net7.0/MySqlConnector.dll
+/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/bin/Debug/net7.0/Pomelo.EntityFrameworkCore.MySql.dll

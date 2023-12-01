@@ -7,4 +7,12 @@ public class BusinessUser : ApplicationUser
 
     // Navigation properties
     public virtual ICollection<Research> Researches { get; set; }
+    public virtual ICollection<Message> CreatedMessages { get; set; }
+
+    // Constructor to initialize the collection
+    public BusinessUser()
+    {
+        Researches = new HashSet<Research>();
+        CreatedMessages = new HashSet<Message>();
+    }
 }

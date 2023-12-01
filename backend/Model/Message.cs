@@ -6,6 +6,9 @@ public class Message
     public string Content { get; set; }
     public DateTime Timestamp { get; set; }
 
+    public string BusinessUserId { get; set; }  // Foreign key property, if applicable
+    public virtual BusinessUser BusinessUser { get; set; }  // Navigation property
+
     // Navigation properties
     public virtual ApplicationUser Sender { get; set; }
     public virtual ApplicationUser Receiver { get; set; }

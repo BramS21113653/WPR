@@ -2,14 +2,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 var builder = WebApplication.CreateBuilder(args);
+
+// builder.Services.AddDbContext<AppContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("AppContext") ?? throw new InvalidOperationException("Connection string 'AppContext' not found.")));
+
+// Add DbContext with MariaDB configuration
 builder.Services.AddDbContext<AppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AppContext") ?? throw new InvalidOperationException("Connection string 'AppContext' not found.")));
+    options.UseMySql(builder.Configuration.GetConnectionString("AppContext"), 
+        new MariaDbServerVersion(new Version(10, 5)))); // Specify your MariaDB version here
+
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppContext>()
                 .AddDefaultTokenProviders();
 builder.Services.AddAuthentication();
+
 // Add services to the container.
 builder.Services.AddCors(options =>
     {
