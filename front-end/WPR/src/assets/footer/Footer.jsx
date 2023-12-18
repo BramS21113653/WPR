@@ -1,14 +1,15 @@
 import React from "react";
 import './Footer.css';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
         <footer>
             <ul>
-                <li><a href="/hulpmiddelen">Hulpmiddelen / Bronnen</a></li>
-                <li><a href="/faq">FAQ / Hulp</a></li>
-                <li><a href="/toegankelijkheidsfuncties">Toegankelijkheidsfuncties</a></li>
-                <li><a href="/partners">Partners en Sponsoren</a></li>
+            <li><Link to="/hulpmiddelen">Hulpmiddelen / Bronnen</Link></li>
+            <li><Link to="/faq">FAQ / Hulp</Link></li>
+            <li><Link to="/toegankelijkheidsfuncties">Toegankelijkheidsfuncties</Link></li>
+            <li><Link to="/partners">Partners en Sponsoren</Link></li>
             </ul>
             <p>&copy; {new Date().getFullYear()} Stichting Accessibility</p>
         </footer>
