@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20231201111015_InitialCreateForMariaDB")]
-    partial class InitialCreateForMariaDB
+    [Migration("20231218195304_IC")]
+    partial class IC
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
