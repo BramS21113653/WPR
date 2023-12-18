@@ -3,8 +3,20 @@ import React from 'react';
 const Inloggen = () => {
   return (
     <div className="main-content">
-      <h1>Welcome to this page</h1>
-      <p>text</p>  
+      <h1>Inloggen</h1>
+     <form>
+       <label>
+         <p>Username</p>
+         <input type="text" />
+       </label>
+       <label>
+         <p>Password</p>
+         <input type="password" />
+       </label>
+       <div>
+         <button type="submit">Submit</button>
+       </div>
+     </form>
     </div>
   );
 };

@@ -4,8 +4,8 @@ import './index.css'
 const Home = () => {
   return (
     <div className="main-content">
-      <h1>Welcome to this page</h1>
-      <p>text</p>  
+      <h1>Home Page</h1>
+      <p></p>  
     </div>
   );
 };
