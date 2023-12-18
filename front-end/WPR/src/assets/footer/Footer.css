@@ -1,0 +1,33 @@
+footer {
+    background-color: #131B56; /* Donkerblauw */
+    color: #FFFFFF; /* Wit */
+    text-align: center;
+    padding: 1rem 0;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+footer ul li {
+    margin: 0 10px;
+}
+
+footer ul li a {
+    color: #FFFFFF; /* Wit */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer ul li a:hover {
+    color: #FFB800; /* Accentkleur */
+}
+
+footer p {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+}
