@@ -15,6 +15,10 @@ import Hulpmiddelen from './Hulpmiddelen';
 import FAQ from './FAQ';
 import Toegankelijkheidsfuncties from './Toegankelijkheidsfuncties';
 import Partners from './Partners';
+import ErvaringsdeskundigenPortal from './ErvaringsdeskundigenPortal';
+import BedrijvenPortal from './BedrijvenPortal';
+import BeheerdersPortal from './BeheerdersPortal';
+
 
 const App = () => {
   return (
@@ -35,6 +39,10 @@ const App = () => {
         <Route path="faq" element={<FAQ />} />
         <Route path="toegankelijkheidsfuncties" element={<Toegankelijkheidsfuncties />} />
         <Route path="partners" element={<Partners />} />
+        {/* Routes portalen */}
+        <Route path="/ervaringsdeskundigen-portal" element={<ErvaringsdeskundigenPortal />} />
+        <Route path="/bedrijvenportal" element={<BedrijvenPortal />} />
+        <Route path="/beheerdersportal" element={<BeheerdersPortal />} />
       </Routes>
       <Footer />
     </BrowserRouter>
