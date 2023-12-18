@@ -1,59 +1,62 @@
-/* Registration form styles for consistency and readability */
+/* Registration specific styles, harmonized with login styles */
 .registreren {
     padding-top: 80px;
     padding-bottom: 60px;
-    min-height: calc(100vh - 140px); /* Adjusts height dynamically */
+    min-height: calc(100vh - 140px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden; /* Ensures no horizontal scrollbar */
-    background-color: #D9EBF7; /* Soft background color */
+    overflow-x: hidden;
+    background-color: #D9EBF7;
+    color: #131B56;
   }
   
   .registreren h1 {
-    color: #131B56; /* Dark blue text for heading */
+    color: #131B56;
     text-align: center;
-    margin-bottom: 0.5rem; /* Spacing below heading */
+    margin-bottom: 2rem;
   }
   
   .registreren form {
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Uniform spacing between form items */
+    gap: 20px;
     max-width: 400px;
-    width: 100%; /* Responsive width */
-    margin: auto; /* Centers form in the available space */
+    width: 100%;
+    margin: 0 auto;
   }
   
   .registreren .form__label {
-    margin-bottom: 0.5rem; /* Space below label before input */
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
   }
   
   .registreren .form__input {
-    padding: 15px; /* Comfortable padding inside inputs */
-    line-height: 1.5; /* Line height for text inside inputs */
-    border-radius: 5px; /* Rounded corners for inputs */
-    border: 1px solid #ccc; /* Subtle border for inputs */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    width: 100%; /* Full width of the form */
-    box-sizing: border-box; /* Border included in width */
-    margin-bottom: 0.5rem; /* Space after each input */
+    padding: 15px;
+    line-height: 1.5;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px; /* Matched with the login form label margin for consistency */
   }
   
   .registreren .btn {
-    padding: 20px; /* Larger button for better interaction */
-    line-height: 1.5;
-    border-radius: 5px; /* Consistent border radius with inputs */
-    width: 100%; /* Button width matches input fields */
-    background-color: #FF7D00; /* Vibrant button color */
-    color: #131B56; /* Text color matches heading */
-    cursor: pointer; /* Indicates button is clickable */
-    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions for interaction */
+    background-color: #FF7D00;
+    color: #131B56;
+    padding: 15px; /* Padding matched with input fields for consistency */
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
   }
   
   .registreren .btn:hover {
-    background-color: #CD4D00; /* Darker shade on hover */
-    transform: translateY(-2px); /* Slight upward movement on hover */
+    background-color: #CD4D00;
+    transform: translateY(-2px);
   }
   
   @media (max-width: 600px) {
@@ -69,7 +72,7 @@
     .registreren .form__input,
     .registreren .btn {
       padding: 12px;
-      font-size: 16px; /* Larger font size for small screens */
+      font-size: 16px;
     }
   }
   
