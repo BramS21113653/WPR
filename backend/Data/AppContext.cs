@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 public class AppContext : IdentityDbContext<ApplicationUser>
 {
@@ -19,6 +20,7 @@ public class AppContext : IdentityDbContext<ApplicationUser>
 
     // DbSets for your entities
     public DbSet<ApplicationUser> Users { get; set; } 
+    // public new DbSet<ApplicationUser> Users { get; set; }
 
     // Separate DbSets for other entities
     public DbSet<Research> Researches { get; set; }
