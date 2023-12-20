@@ -1,42 +1,61 @@
 // Navbar.jsx
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import logo from '../LOGO.png'; // Adjust the path as needed
 import './Navbar.scss';
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
     };
 
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
+    const drawerList = () => (
+        <List>
+            {['Home', 'Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+                <ListItem button key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} onClick={handleDrawerClose}>
+                    <ListItemText primary={text} />
+                </ListItem>
+            ))}
+        </List>
+    );
+
     return (
-        <nav>
-            <div className="logo">
-                <Link to="/">
+        <AppBar position="static" sx={{ backgroundColor: '#111329' }}>
+            <Toolbar>
+                <Link to="/" className="logo">
                     <img src={logo} alt="Logo" />
                 </Link>
-            </div>
-
-            <button className="hamburger" onClick={toggleMenu}>
-                {/* Icon from Font Awesome or similar library */}
-                <span className="hamburger-lines"></span>
-            </button>
-
-            <ul className={isOpen ? "nav-links open" : "nav-links"}>
-                <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
-                <li><Link to="/over-ons" onClick={toggleMenu}>Over Ons</Link></li>
-                <li><Link to="/nieuws" onClick={toggleMenu}>Nieuws</Link></li>
-                <li><Link to="/contact" onClick={toggleMenu}>Contact</Link></li>
-                <li><Link to="/portal" onClick={toggleMenu}>portal</Link></li>
-                <li><Link to="/onderzoeke" onClick={toggleMenu}>onderzoeke</Link></li>
-                <li><Link to="/inloggen" onClick={toggleMenu}>inloggen</Link></li>
-                <li><Link to="/registreren" onClick={toggleMenu}>registreren</Link></li>
-            </ul>
-        </nav>
+                {isMobile ? (
+                    <>
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ ml: 'auto' }} onClick={handleDrawerOpen}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
+                            {drawerList()}
+                        </Drawer>
+                    </>
+                ) : (
+                    <List sx={{ display: 'flex', marginLeft: 'auto' }}>
+                        {['Home', 'Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+                            <ListItem key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} className="nav-item">
+                                <ListItemText primary={text} sx={{ color: '#FFFFFF', textDecoration: 'none' }} />
+                            </ListItem>
+                        ))}
+                    </List>
+                )}
+            </Toolbar>
+        </AppBar>
     );
 };
 
 export default Navbar;
-
