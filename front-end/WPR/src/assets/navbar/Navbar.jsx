@@ -21,7 +21,7 @@ const Navbar = () => {
 
     const drawerList = () => (
         <List>
-            {['Home', 'Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+            {['Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
                 <ListItem button key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} onClick={handleDrawerClose}>
                     <ListItemText primary={text} />
                 </ListItem>
@@ -46,7 +46,7 @@ const Navbar = () => {
                     </>
                 ) : (
                     <List sx={{ display: 'flex', marginLeft: 'auto' }}>
-                        {['Home', 'Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+                        {['Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
                             <ListItem key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} className="nav-item">
                                 <ListItemText primary={text} sx={{ color: '#FFFFFF', textDecoration: 'none' }} />
                             </ListItem>
