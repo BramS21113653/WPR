@@ -3,7 +3,7 @@ import React from 'react';
 
 const ChatButton = ({ onClick }) => {
     return (
-        <button onClick={onClick}>Open Chat</button>
+        <button onClick={onClick}>OPEN CHAT</button>
     );
 };
 
