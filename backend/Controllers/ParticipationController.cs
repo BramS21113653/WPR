@@ -20,5 +20,19 @@ public class ParticipationController : ControllerBase
         return await _context.Participations.ToListAsync();
     }
 
+    // GET: /Participation/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Participation>> GetParticipation(string id)
+    {
+        var participation = await _context.Participations.FindAsync(id);
+
+        if (participation == null)
+        {
+            return NotFound();
+        }
+
+        return participation;
+    }
+
     // Additional CRUD methods (GET by ID, POST, PUT, DELETE) can be added here
 }
