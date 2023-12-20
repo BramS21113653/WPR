@@ -1,0 +1,12 @@
+/* ChatModal.css */
+.chat-modal {
+    position: fixed;
+    bottom: 10%;
+    right: 10%;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid black;
+    z-index: 1000; /* Zorgt ervoor dat het boven andere inhoud verschijnt */
+    padding: 20px;
+}

@@ -19,6 +19,18 @@ body, html {
   background-color: #D9EBF7; /* Soft background color */
 }
 
+.chat-modal {
+  position: fixed;
+  bottom: 0; /* Verplaats de modal naar de onderkant van de pagina */
+  right: 0; /* Verplaats de modal naar de rechterkant van de pagina */
+  width: 300px;
+  height: 400px;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 1000; /* Zorgt ervoor dat het boven andere inhoud verschijnt */
+  padding: 20px;
+}
+
 /* Navbar styles */
 nav {
   background-color: #111329; /* Dark blue background */
