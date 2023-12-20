@@ -18,13 +18,14 @@ import Partners from './Partners';
 import ErvaringsdeskundigenPortaal from './pages/Portals/ErvaringsdeskundigenPortaal';
 import BedrijfsPortaal from './pages/Portals/BedrijfsPortaal';
 import BeheerdersPortaal from './pages/Portals/BeheerdersPortaal';
+import './index.scss'
 
 
 const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <body>
+      <div className="content-container">
         <Routes>
           {/* Routes nav links */}
           <Route path="/" element={<Home />} />
@@ -45,7 +46,7 @@ const App = () => {
           <Route path="/BedrijfsPortaal" element={<BedrijfsPortaal />} />
           <Route path="/beheerdersportal" element={<BeheerdersPortaal />} />
         </Routes>
-      </body>
+      </div>
       <Footer />
     </BrowserRouter>
   );

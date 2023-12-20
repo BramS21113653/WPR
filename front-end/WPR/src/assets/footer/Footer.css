@@ -1,33 +1,39 @@
+/* Footer styles */
 footer {
     background-color: #131B56; /* Donkerblauw */
     color: #FFFFFF; /* Wit */
     text-align: center;
     padding: 1rem 0;
-}
-
-footer ul {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000; /* Ensure footer is above other content */
+  }
+  
+  footer ul {
     list-style-type: none;
     padding: 0;
     margin: 0 auto;
     display: flex;
     justify-content: center;
-}
-
-footer ul li {
+  }
+  
+  footer ul li {
     margin: 0 10px;
-}
-
-footer ul li a {
+  }
+  
+  footer ul li a {
     color: #FFFFFF; /* Wit */
     text-decoration: none;
     transition: color 0.3s ease;
-}
-
-footer ul li a:hover {
+  }
+  
+  footer ul li a:hover {
     color: #FFB800; /* Accentkleur */
-}
-
-footer p {
+  }
+  
+  footer p {
     margin-top: 1rem;
     font-size: 0.8rem;
-}
+  }

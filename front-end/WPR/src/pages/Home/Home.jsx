@@ -1,4 +1,4 @@
-import '../../index.css'
+import '../../index.scss'
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Button, Grid, Paper } from '@mui/material';
 import './HomePage.scss'; // Zorg ervoor dat je een SCSS-bestand hebt met deze naam
