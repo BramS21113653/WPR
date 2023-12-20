@@ -1,7 +1,7 @@
 import React from "react";
 import './Footer.css';
 import { Link } from 'react-router-dom';
-import ChatButton from '../chat/ChatButton'; // Zorg ervoor dat dit pad correct is
+import ChatButton from '../chat/ChatButton.jsx'; // Zorg ervoor dat dit pad correct is
 
 const Footer = ({ onChatClick }) => {
     return (
