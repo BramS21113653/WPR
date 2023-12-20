@@ -23,22 +23,34 @@ public class ApplicationUserController : ControllerBase
     {
         return await _context.Users.ToListAsync();
     }
-
+    
     [AllowAnonymous]
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest model)
+    public async Task<IActionResult> Register(RegisterRequest model)
     {
-        _userService.Register(model);
-        return Ok(new { message = "Registration successful" });
+        var result = await _userService.Register(model);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Registration successful" });
+        }
+
+        // If the registration was not successful, send back the list of errors
+        var errors = result.Errors.Select(e => e.Description).ToList();
+        return BadRequest(new { errors });
     }
 
-    [AllowAnonymous]
-    [HttpPost("authenticate")]
-    public IActionResult Authenticate(AuthenticateRequest model)
+[AllowAnonymous]
+[HttpPost("authenticate")]
+public async Task<IActionResult> Authenticate(AuthenticateRequest model)
+{
+    var response = await _userService.Authenticate(model);
+    if (response != null)
     {
-        var response = _userService.Authenticate(model);
         return Ok(response);
     }
+    // Return an appropriate response, e.g. Unauthorized
+    return Unauthorized(new { message = "Authentication failed" });
+}
 
     // Additional CRUD methods (GET by ID, POST, PUT, DELETE) can be added here
 }

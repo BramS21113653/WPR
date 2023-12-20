@@ -11,52 +11,54 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext with MariaDB configuration
 builder.Services.AddDbContext<AppContext>(options =>
-   options.UseMySql(builder.Configuration.GetConnectionString("AppContext"), 
-       new MariaDbServerVersion(new Version(10, 5)))); // Specify your MariaDB version here
+    options.UseMySql(builder.Configuration.GetConnectionString("AppContext"), 
+    new MariaDbServerVersion(new Version(10, 5))));
 
 // Add Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-               .AddEntityFrameworkStores<AppContext>()
-               .AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppContext>()
+    .AddDefaultTokenProviders();
+
+// Register IUserService for dependency injection
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("JWT");
-var jwtKey = jwtSection["SecretKey"];
+builder.Services.Configure<AppSettings>(jwtSection); // Configure AppSettings with JWT section
 
+var jwtKey = jwtSection["SecretKey"];
 if (string.IsNullOrEmpty(jwtKey))
 {
-   throw new ArgumentException("JWT SecretKey cannot be null or empty.");
+    throw new ArgumentException("JWT SecretKey cannot be null or empty.");
 }
-
 var jwtKeyBytes = Encoding.ASCII.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(options =>
 {
-   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-   options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
-   options.TokenValidationParameters = new TokenValidationParameters
-   {
-       ValidateIssuerSigningKey = true,
-       IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
-       ValidateIssuer = false,
-       ValidateAudience = false,
-       RequireExpirationTime = false,
-       ValidateLifetime = true
-   };
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(jwtKeyBytes),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        RequireExpirationTime = false,
+        ValidateLifetime = true
+    };
 });
 
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
-   options.AddPolicy("AllowSpecificOrigin",
-       builder => builder.WithOrigins("https://localhost:3000", "https://localhost:5173", "http://localhost:5173") // Replace with your server URL
-                         .AllowAnyHeader()
-                         .AllowAnyMethod());
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("https://localhost:3000", "https://localhost:5173", "http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
 });
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -66,10 +68,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-   app.UseSwagger();
-   app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 app.UseAuthentication();

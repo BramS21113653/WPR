@@ -9,28 +9,11 @@ public class AppContext : IdentityDbContext<ApplicationUser>
     {
     }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     if (!optionsBuilder.IsConfigured)
-    //     {
-    //         optionsBuilder.UseMySql("Your_MariaDB_Connection_String", 
-    //             new MariaDbServerVersion(new Version(10, 5))); // Specify your MariaDB version here
-    //     }
-    // }
-
-    // DbSets for your entities
-    public DbSet<ApplicationUser> Users { get; set; } 
-    // public new DbSet<ApplicationUser> Users { get; set; }
-
-    // Separate DbSets for other entities
+    public new DbSet<ApplicationUser> Users { get; set; } // If you want to hide the inherited member intentionally
     public DbSet<Research> Researches { get; set; }
     public DbSet<Participation> Participations { get; set; }
     public DbSet<Message> Messages { get; set; }
-
-    // Note: ParentGuardian is also an ApplicationUser, but if you need to query them specifically, you can include this
-    public DbSet<ParentGuardian> ParentGuardians { get; set; } 
-
-    // If you need to specifically query other types of users, include them as well
+    public DbSet<ParentGuardian> ParentGuardians { get; set; }
     public DbSet<PanelMember> PanelMembers { get; set; }
     public DbSet<BusinessUser> BusinessUsers { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
