@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './assets/navbar/Navbar';
 import Footer from './assets/footer/Footer';
@@ -19,9 +19,17 @@ import ErvaringsdeskundigenPortaal from './pages/Portals/ErvaringsdeskundigenPor
 import BedrijfsPortaal from './pages/Portals/BedrijfsPortaal';
 import BeheerdersPortaal from './pages/Portals/BeheerdersPortaal';
 import './index.scss'
+import ChatModal from './assets/chatmodal/ChatModal'; // Zorg ervoor dat dit het juiste pad is
+import ChatButton from './assets/chat/ChatButton'
 
 
 const App = () => {
+  const [showChatModal, setShowChatModal] = useState(false);
+
+  const handleChatClick = () => {
+    setShowChatModal(!showChatModal); // Schakelt de zichtbaarheid van de chatmodal
+  };
+
   return (
     <BrowserRouter>
       <Navbar />
@@ -47,8 +55,9 @@ const App = () => {
           <Route path="/beheerdersportal" element={<BeheerdersPortaal />} />
         </Routes>
       </div>
-      <Footer />
-    </BrowserRouter>
+      <Footer onChatClick={handleChatClick} />
+      {showChatModal && <ChatModal onClose={() => setShowChatModal(false)} />}
+      </BrowserRouter>
   );
 };
 
