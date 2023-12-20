@@ -1,0 +1,50 @@
+.homePage {
+    .heroSection {
+      background: linear-gradient(to right, #56ccf2, #2f80ed); // Pas deze kleuren aan op basis van de afbeelding
+      padding: 40px;
+      text-align: center;
+  
+      .heroButton {
+        margin-top: 20px;
+        background-color: #f2994a; // Voorbeeldkleur, aanpassen aan design
+        &:hover {
+          background-color: darken(#f2994a, 10%);
+        }
+      }
+    }
+  
+    .infoSections {
+      margin-top: -60px; // Overlap met heroSection
+  
+      .infoPaper {
+        padding: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #fff; // Aanpassen aan design
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  
+        h2 {
+          color: #333; // Aanpassen aan design
+        }
+      }
+    }
+  }
+  
+  // Responsiveness
+  @media (max-width: 768px) {
+    .homePage {
+      .heroSection {
+        padding: 20px;
+      }
+  
+      .infoSections {
+        .infoPaper {
+          padding: 15px;
+        }
+      }
+    }
+  }
+  
