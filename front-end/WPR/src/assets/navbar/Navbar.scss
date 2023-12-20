@@ -1,0 +1,27 @@
+// Navbar.scss
+
+.logo img {
+    width: 40px;
+    height: auto;
+  }
+  
+  .nav-item {
+    margin-left: 20px;
+  
+    .MuiListItemText-root {
+      font-size: 1rem; /* Adjust font size as necessary */
+      transition: color 0.3s ease;
+  
+      &:hover {
+        color: #21CEA1; /* Accent color */
+      }
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .nav-item {
+      margin-left: 0;
+    }
+  }
+  

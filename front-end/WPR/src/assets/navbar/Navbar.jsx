@@ -1,28 +1,60 @@
-import React from "react";
-import logo from '../LOGO.png'; // Adjusted path going one directory up then to assets
-import './Navbar.css';
+// Navbar.jsx
+import React, { useState } from 'react';
+import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
+import logo from '../LOGO.png'; // Adjust the path as needed
+import './Navbar.scss';
 
 const Navbar = () => {
-    return (
-        <nav>
-            <div className="logo">
-                <a href="/">
-                    <img src={logo} alt="Logo" />
-                </a>
-            </div>
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-            <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/over-ons">Over Ons</Link></li>
-            <li><Link to="/nieuws">Nieuws</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-            <li><Link to="/portal">Portal</Link></li>
-            <li><Link to="/onderzoeken">Onderzoeken</Link></li>
-            <li><Link to="/inloggen">Inloggen</Link></li>
-            <li><Link to="/registreren">Registreren</Link></li>
-            </ul>
-        </nav>
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
+    const drawerList = () => (
+        <List>
+            {['Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+                <ListItem button key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} onClick={handleDrawerClose}>
+                    <ListItemText primary={text} />
+                </ListItem>
+            ))}
+        </List>
+    );
+
+    return (
+        <AppBar position="static" sx={{ backgroundColor: '#111329' }}>
+            <Toolbar>
+                <Link to="/" className="logo">
+                    <img src={logo} alt="Logo" />
+                </Link>
+                {isMobile ? (
+                    <>
+                        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ ml: 'auto' }} onClick={handleDrawerOpen}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
+                            {drawerList()}
+                        </Drawer>
+                    </>
+                ) : (
+                    <List sx={{ display: 'flex', marginLeft: 'auto' }}>
+                        {['Over Ons', 'Nieuws', 'Contact', 'Portal', 'Onderzoeken', 'Inloggen', 'Registreren'].map((text, index) => (
+                            <ListItem key={text} component={Link} to={`/${text.toLowerCase().replace(/\s+/g, '-')}`} className="nav-item">
+                                <ListItemText primary={text} sx={{ color: '#FFFFFF', textDecoration: 'none' }} />
+                            </ListItem>
+                        ))}
+                    </List>
+                )}
+            </Toolbar>
+        </AppBar>
     );
 };
 
