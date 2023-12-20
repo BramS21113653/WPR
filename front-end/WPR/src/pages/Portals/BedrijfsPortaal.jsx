@@ -7,7 +7,7 @@ import '../../index.scss'
 const BedrijfsPortaal = () => {
   return (
     <div>
-      <ProfielComponent />
+      <Profile />
       <OpdrachtenBeheer />
       <ChatInterface />
     </div>
