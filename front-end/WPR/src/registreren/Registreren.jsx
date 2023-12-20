@@ -16,11 +16,36 @@ const Registreren = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  // LinkedIn AutoFill functionality
+  const handleLinkedInFill = () => {
+    // Load the LinkedIn script and initialize the API
+    const script = document.createElement("script");
+    script.src = "https://platform.linkedin.com/in.js";
+    script.innerHTML = `api_key: 78ljemtnficc1r
+                         authorize: true
+                         onLoad: onLinkedInLoad`;
+    document.body.appendChild(script);
+
+    // Define the callback function for when LinkedIn is loaded
+    window.onLinkedInLoad = () => {
+      window.IN.User.authorize(() => {
+        window.IN.API.Profile("me").fields(["firstName", "lastName", "emailAddress"]).result(profiles => {
+          const profile = profiles.values[0];
+          setFormData({
+            ...formData,
+            voornaam: profile.firstName || '',
+            achternaam: profile.lastName || '',
+            email: profile.emailAddress || '',
+          });
+        });
+      });
+    };
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simple validation
     if (formData.wachtwoord !== formData.herhaalWachtwoord) {
       alert('Wachtwoorden komen niet overeen!');
       return;
@@ -33,7 +58,7 @@ const Registreren = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Username: formData.voornaam + formData.achternaam, // Or any other logic for username
+          Username: formData.voornaam + formData.achternaam,
           Email: formData.email,
           Password: formData.wachtwoord,
           FirstName: formData.voornaam,
@@ -47,7 +72,6 @@ const Registreren = () => {
 
       alert('Registratie succesvol!');
       // Further actions on successful registration like redirecting to a login page
-
     } catch (error) {
       alert(error.message);
     }
@@ -57,6 +81,10 @@ const Registreren = () => {
     <div className="registreren">
       <h1>Registreren</h1>
       <form onSubmit={handleSubmit}>
+        <div className="linkedin-autofill">
+          <button type="button" onClick={handleLinkedInFill}>Vul in met LinkedIn</button>
+          <p>coming soon...</p>
+        </div>
         <div className="form-body">
           <div className="voornaam">
             <label className="form__label" htmlFor="voornaam">Voornaam </label>
