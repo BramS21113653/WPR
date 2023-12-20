@@ -15,9 +15,9 @@ import Hulpmiddelen from './Hulpmiddelen';
 import FAQ from './FAQ';
 import Toegankelijkheidsfuncties from './Toegankelijkheidsfuncties';
 import Partners from './Partners';
-import ErvaringsdeskundigenPortal from './ErvaringsdeskundigenPortal';
-import BedrijvenPortal from './BedrijvenPortal';
-import BeheerdersPortal from './BeheerdersPortal';
+import ErvaringsdeskundigenPortaal from './pages/Portals/ErvaringsdeskundigenPortaal';
+import BedrijfsPortaal from './pages/Portals/BedrijfsPortaal';
+import BeheerdersPortaal from './pages/Portals/BeheerdersPortaal';
 
 
 const App = () => {
@@ -40,9 +40,9 @@ const App = () => {
         <Route path="toegankelijkheidsfuncties" element={<Toegankelijkheidsfuncties />} />
         <Route path="partners" element={<Partners />} />
         {/* Routes portalen */}
-        <Route path="/ervaringsdeskundigen-portal" element={<ErvaringsdeskundigenPortal />} />
-        <Route path="/bedrijvenportal" element={<BedrijvenPortal />} />
-        <Route path="/beheerdersportal" element={<BeheerdersPortal />} />
+        <Route path="/ervaringsdeskundigen-portal" element={<ErvaringsdeskundigenPortaal />} />
+        <Route path="/BedrijfsPortaal" element={<BedrijfsPortaal />} />
+        <Route path="/beheerdersportal" element={<BeheerdersPortaal />} />
       </Routes>
       <Footer />
     </BrowserRouter>

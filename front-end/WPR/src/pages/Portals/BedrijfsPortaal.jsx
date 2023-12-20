@@ -1,0 +1,16 @@
+import React from 'react';
+import Profile from '../../components/Profile';
+import OpdrachtenBeheer from '../../components/OpdrachtenBeheer';
+import ChatInterface from '../../components/ChatInterface';
+
+const BedrijfsPortaal = () => {
+  return (
+    <div>
+      <ProfielComponent />
+      <OpdrachtenBeheer />
+      <ChatInterface />
+    </div>
+  );
+};
+
+export default BedrijfsPortaal;
