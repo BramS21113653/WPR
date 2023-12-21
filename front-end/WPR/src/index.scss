@@ -11,7 +11,7 @@ body, html {
 .main-content {
   padding-top: 1rem; /* Adjusted for navbar height */
   padding-bottom: 4rem; /* Adjusted for footer height */
-  min-height: calc(100vh - 8rem); /* Adjusted for navbar and footer */
+  min-height: calc(100vh - 32vh); /* Adjusted for navbar and footer */
   display: flex;
   flex-direction: column;
   align-items: center; /* Center content */

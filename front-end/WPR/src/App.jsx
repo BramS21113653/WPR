@@ -8,8 +8,8 @@ import Nieuws from './Nieuws';
 import Contact from './Contact';
 import Portal from './Portal';
 import Onderzoeken from './Onderzoeken';
-import Registreren from './registreren/Registreren';
-import Inloggen from './inloggen/Inloggen';
+import Registreren from './pages/registreren/Registreren';
+import Inloggen from './pages/Login/Inloggen';
 // Import the new components
 import Hulpmiddelen from './Hulpmiddelen';
 import FAQ from './FAQ';
