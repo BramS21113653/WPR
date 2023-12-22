@@ -78,7 +78,7 @@ const Registreren = () => {
   };
 
   return (
-    <div className="registreren">
+    <div className="registreren main-content">
       <h1>Registreren</h1>
       <form onSubmit={handleSubmit}>
         <div className="linkedin-autofill">
