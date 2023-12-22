@@ -3,18 +3,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './assets/navbar/Navbar';
 import Footer from './assets/footer/Footer';
 import Home from './pages/Home/Home';
-import OverOns from './OverOns';
-import Nieuws from './Nieuws';
-import Contact from './Contact';
-import Portal from './Portal';
-import Onderzoeken from './Onderzoeken';
+import OverOns from './pages/OverOns';
+import Nieuws from './pages/Nieuws';
+import Contact from './pages/Contact';
+import Portal from './pages/Portals/Portal';
+import Onderzoeken from './pages/Onderzoeken';
 import Registreren from './pages/registreren/Registreren';
 import Inloggen from './pages/Login/Inloggen';
 // Import the new components
-import Hulpmiddelen from './Hulpmiddelen';
-import FAQ from './FAQ';
-import Toegankelijkheidsfuncties from './Toegankelijkheidsfuncties';
-import Partners from './Partners';
+import Hulpmiddelen from './pages/General_Pages/Hulpmiddelen';
+import FAQ from './components/FAQ';
+import Toegankelijkheidsfuncties from './pages/General_Pages/Toegankelijkheidsfuncties';
+import Partners from './pages/General_Pages/Partners';
 import ErvaringsdeskundigenPortaal from './pages/Portals/ErvaringsdeskundigenPortaal';
 import BedrijfsPortaal from './pages/Portals/BedrijfsPortaal';
 import BeheerdersPortaal from './pages/Portals/BeheerdersPortaal';
@@ -33,7 +33,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
-      <div className="content-container">
+      <div>
         <Routes>
           {/* Routes nav links */}
           <Route path="/" element={<Home />} />
