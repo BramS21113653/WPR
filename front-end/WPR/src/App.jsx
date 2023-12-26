@@ -21,6 +21,7 @@ import BeheerdersPortaal from './pages/Portals/BeheerdersPortaal';
 import './index.scss'
 import ChatModal from './assets/chatmodal/ChatModal'; // Zorg ervoor dat dit het juiste pad is
 import ChatButton from './assets/chat/ChatButton'
+import { UserProvider } from './UserContext';
 
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
   };
 
   return (
+    <UserProvider>
     <BrowserRouter>
       <Navbar />
       <div>
@@ -51,13 +53,14 @@ const App = () => {
           <Route path="partners" element={<Partners />} />
           {/* Routes portalen */}
           <Route path="/ervaringsdeskundigen-portal" element={<ErvaringsdeskundigenPortaal />} />
-          <Route path="/BedrijfsPortaal" element={<BedrijfsPortaal />} />
+          <Route path="/bedrijfsportal" element={<BedrijfsPortaal />} />
           <Route path="/beheerdersportal" element={<BeheerdersPortaal />} />
         </Routes>
       </div>
       <Footer onChatClick={handleChatClick} />
       {showChatModal && <ChatModal onClose={() => setShowChatModal(false)} />}
       </BrowserRouter>
+      </UserProvider>
   );
 };
 

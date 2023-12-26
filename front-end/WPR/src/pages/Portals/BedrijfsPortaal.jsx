@@ -6,9 +6,10 @@ import ChatInterface from '../../components/ChatInterface';
 const BedrijfsPortaal = () => {
   return (
     <div className="main-content">
-      <Profile />
-      <OpdrachtenBeheer />
-      <ChatInterface />
+      <h1>Bedrijfsportaal</h1>
+      <Profile title="Bedrijfsprofiel" />
+      <OpdrachtenBeheer title="Beheer Onderzoeksopdrachten" />
+      <ChatInterface title="Chat met Deelnemers en Accessibility" />
     </div>
   );
 };

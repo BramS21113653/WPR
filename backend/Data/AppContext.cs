@@ -24,6 +24,13 @@ public class AppContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
+    // Configure discriminator for TPH (if using TPH)
+    modelBuilder.Entity<ApplicationUser>()
+        .HasDiscriminator<string>("UserType")
+        .HasValue<PanelMember>("PanelMember")
+        .HasValue<BusinessUser>("BusinessUser")
+        .HasValue<Administrator>("Administrator");
+        // ... Add other derived types
 
     // Message Relationships
     modelBuilder.Entity<Message>()
@@ -53,7 +60,7 @@ public class AppContext : IdentityDbContext<ApplicationUser>
         .WithMany(bu => bu.Researches)
         .HasForeignKey(r => r.ConductorId)
         .OnDelete(DeleteBehavior.Restrict); // Adjust as per your requirement
-
+ 
     // Participation Relationships
     modelBuilder.Entity<Participation>()
         .HasOne(p => p.PanelMember)

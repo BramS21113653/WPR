@@ -24,20 +24,34 @@ public class ApplicationUserController : ControllerBase
         return await _context.Users.ToListAsync();
     }
     
-    [AllowAnonymous]
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequest model)
-    {
-        var result = await _userService.Register(model);
-        if (result.Succeeded)
-        {
-            return Ok(new { message = "Registration successful" });
-        }
+    // [AllowAnonymous]
+    // [HttpPost("register")]
+    // public async Task<IActionResult> Register(RegisterRequest model)
+    // {
+    //     var result = await _userService.Register(model);
+    //     if (result.Succeeded)
+    //     {
+    //         return Ok(new { message = "Registration successful" });
+    //     }
 
-        // If the registration was not successful, send back the list of errors
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        return BadRequest(new { errors });
+    //     // If the registration was not successful, send back the list of errors
+    //     var errors = result.Errors.Select(e => e.Description).ToList();
+    //     return BadRequest(new { errors });
+    // }
+
+[HttpPost("register")]
+public async Task<ActionResult> RegisterUser([FromBody] RegisterRequest model)
+{
+    var result = await _userService.Register(model);
+    if (result.Succeeded)
+    {
+        return Ok("User registered as PanelMember");
     }
+    else
+    {
+        return BadRequest(result.Errors);
+    }
+}
 
 [AllowAnonymous]
 [HttpPost("authenticate")]

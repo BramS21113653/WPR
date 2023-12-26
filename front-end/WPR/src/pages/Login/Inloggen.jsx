@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Inloggen.css';
 import { useForm } from "react-hook-form";
+import { UserContext } from '../../UserContext'; // Importeer de UserContext
 
 const Inloggen = () => {
+  const { setUser } = useContext(UserContext); // Gebruik de setUser functie van UserContext
   const { register, handleSubmit, formState: { errors } } = useForm();
-  
+
   const onSubmit = async (data) => {
     try {
       const response = await fetch('https://localhost:5001/ApplicationUser/authenticate', {
@@ -23,9 +25,10 @@ const Inloggen = () => {
       }
 
       const responseData = await response.json();
-      console.log(responseData); // Of doe iets met de ontvangen gegevens, zoals het opslaan van de token
+      localStorage.setItem('jwtToken', responseData.token); // Sla de JWT-token op in localStorage
+      setUser({ isLoggedIn: true, user: responseData.user }); // Update de gebruikersstatus in de context
 
-      // Voer verdere acties uit, zoals redirect naar een andere pagina of update gebruikerstaat
+      // Voer verdere acties uit, zoals redirect naar een dashboard of hoofdpagina
     } catch (error) {
       alert(error.message);
     }

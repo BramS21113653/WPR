@@ -6,6 +6,7 @@ import ChatInterface from '../../components/ChatInterface';
 const BeheerdersPortal = () => {
   return (
     <div className="main-content">
+      <h1>Beheerdersportaal</h1>
       <GebruikersBeheer />
       <OnderzoekenBeheer />
       <ChatInterface />

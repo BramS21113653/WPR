@@ -18,27 +18,48 @@ public class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<IdentityResult> Register(RegisterRequest model)
-    {
-        // Ensure required fields are not null or empty
+    // public async Task<IdentityResult> Register(RegisterRequest model)
+    // {
+    //     // Ensure required fields are not null or empty
+    //     if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
+    //     {
+    //         return IdentityResult.Failed(new IdentityError { Description = "FirstName and LastName are required." });
+    //     }
+
+    //     var user = new ApplicationUser
+    //     {
+    //         UserName = model.Username,
+    //         Email = model.Email,
+    //         FirstName = model.FirstName,
+    //         LastName = model.LastName,
+    //         // Other properties...
+    //     };
+
+    //     var result = await _userManager.CreateAsync(user, model.Password);
+    //     // Handle the result...
+    //     return result;
+    // }
+
+    public async Task<IdentityResult> Register(RegisterRequest model) {
         if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
         {
             return IdentityResult.Failed(new IdentityError { Description = "FirstName and LastName are required." });
         }
 
-        var user = new ApplicationUser
+        var user = new PanelMember // Changed from ApplicationUser to PanelMember
         {
             UserName = model.Username,
             Email = model.Email,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            // Other properties...
+            // Initialize other properties of PanelMember if necessary
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
         // Handle the result...
         return result;
     }
+
 
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
