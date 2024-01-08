@@ -1,12 +1,12 @@
 public class Message
 {
-    public string Id { get; set; }
-    public string SenderId { get; set; }
-    public string ReceiverId { get; set; }
+    public string Id { get; set; }  // Assuming Id is a string. If you want it to be Guid, change accordingly.
+    public Guid SenderId { get; set; }  // Changed from string to Guid
+    public Guid ReceiverId { get; set; }  // Changed from string to Guid
     public string Content { get; set; }
     public DateTime Timestamp { get; set; }
 
-    public string BusinessUserId { get; set; }  // Foreign key property, if applicable
+    public Guid BusinessUserId { get; set; }  // Change to Guid if BusinessUser Id is of type Guid
     public virtual BusinessUser BusinessUser { get; set; }  // Navigation property
 
     // Navigation properties

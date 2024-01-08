@@ -14,10 +14,14 @@ builder.Services.AddDbContext<AppContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("AppContext"), 
     new MariaDbServerVersion(new Version(10, 5))));
 
-// Add Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppContext>()
-    .AddDefaultTokenProviders();
+// // Add Identity
+// builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+//     .AddEntityFrameworkStores<AppContext>()
+//     .AddDefaultTokenProviders();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+        .AddEntityFrameworkStores<AppContext>()
+        .AddDefaultTokenProviders();
 
 // Register IUserService for dependency injection
 builder.Services.AddScoped<IUserService, UserService>();

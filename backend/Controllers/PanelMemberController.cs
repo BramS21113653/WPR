@@ -18,155 +18,62 @@ public class PanelMemberController : ControllerBase
         _context = context;
         _logger = logger;
     }
-    
-[HttpGet("{id:guid}")]
-public async Task<ActionResult<PanelMember>> GetPanelMemberById(Guid id)
-{
-    _logger.LogInformation($"Attempting to retrieve panel member with ID: {id}");
 
-    var panelMember = await _context.PanelMembers
-        .Include(pm => pm.ParentGuardian)
-        .FirstOrDefaultAsync(pm => pm.Id == id.ToString()); // Convert Guid to string
-
-    if (panelMember == null)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<PanelMember>> GetPanelMemberById(Guid id)
     {
-        _logger.LogWarning($"Panel member not found with ID: {id}");
-        return NotFound($"Panel member not found with ID: {id}");
+        _logger.LogInformation($"Attempting to retrieve panel member with ID: {id}");
+
+        var panelMember = await _context.PanelMembers
+            // .Include(pm => pm.ParentGuardian)
+            .FirstOrDefaultAsync(pm => pm.Id == id); // Directly compare Guids
+
+        if (panelMember == null)
+        {
+            _logger.LogWarning($"Panel member not found with ID: {id}");
+            return NotFound($"Panel member not found with ID: {id}");
+        }
+
+        return panelMember;
     }
 
-    return panelMember;
+    //todo
+ [HttpGet("profile"), Authorize]
+public async Task<ActionResult<PanelMember>> GetProfile()
+{
+   var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+   if (userId == null)
+   {
+       _logger.LogWarning("User ID claim not found in the token.");
+       return NotFound("User ID claim not found in the token.");
+   }
+
+   if (!Guid.TryParse(userId, out Guid guidId))
+   {
+       _logger.LogWarning($"Invalid user ID format: {userId}");
+       return BadRequest("Invalid user ID format.");
+   }
+
+   _logger.LogInformation($"Attempting to retrieve profile for user ID: {userId}");
+
+   bool userExists = await _context.PanelMembers.AnyAsync(pm => pm.Id == guidId);
+
+   if (!userExists)
+   {
+       _logger.LogWarning($"Panel member not found with ID: {userId}");
+       return NotFound($"Panel member not found with ID: {userId}");
+   }
+
+   var panelMember = await _context.PanelMembers
+       .FirstOrDefaultAsync(pm => pm.Id == guidId);
+
+   return panelMember;
 }
 
 
-    [HttpGet("all")]
-    public async Task<ActionResult<IEnumerable<PanelMember>>> GetPanelMembers()
-    {
-        return await _context.PanelMembers.ToListAsync();
-    }
-
-    // // [HttpGet, Authorize]
-    // [HttpGet]
-    // public async Task<ActionResult<PanelMember>> GetPanelMember()
-    // {
-    //     // Log the user ID obtained from the token for debugging purposes.
-    //     string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //     _logger.LogInformation($"Attempting to retrieve panel member for user ID: {userId}");
-
-    //     if (string.IsNullOrEmpty(userId))
-    //     {
-    //         _logger.LogWarning("User ID claim not found in the token.");
-    //         return NotFound("User ID claim not found in the token.");
-    //     }
-
-    //     var panelMember = await _context.PanelMembers.Include(pm => pm.ParentGuardian).SingleOrDefaultAsync(pm => pm.Id == userId);
-
-    //     if (panelMember == null)
-    //     {
-    //         _logger.LogWarning($"Panel member not found for user ID: {userId}");
-    //         return NotFound($"Panel member not found for user ID: {userId}");
-    //     }
-
-    //     return panelMember;
-    // }
-
-    // [HttpGet]
-    // public async Task<ActionResult<PanelMember>> GetPanelMember()
-    // {
-    //     string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    //     _logger.LogInformation($"Attempting to retrieve panel member for user ID: {userId}");
-
-    //     if (string.IsNullOrEmpty(userId))
-    //     {
-    //         _logger.LogWarning("User ID claim not found in the token.");
-    //         return NotFound("User ID claim not found in the token.");
-    //     }
-
-    //     var panelMember = await _context.Users.OfType<PanelMember>().Include(pm => pm.ParentGuardian).SingleOrDefaultAsync(pm => pm.Id == userId);
-
-    //     if (panelMember == null)
-    //     {
-    //         _logger.LogWarning($"Panel member not found for user ID: {userId}");
-    //         return NotFound($"Panel member not found for user ID: {userId}");
-    //     }
-
-    //     return panelMember;
-    // }
-
-
-// [HttpGet]
-// public async Task<ActionResult<PanelMember>> GetPanelMember()
-// {
-//     string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-//     _logger.LogInformation($"Attempting to retrieve panel member for user ID: {userId}");
-
-//     if (string.IsNullOrEmpty(userId))
-//     {
-//         _logger.LogWarning("User ID claim not found in the token.");
-//         return NotFound("User ID claim not found in the token.");
-//     }
-
-//     // Query for the PanelMember directly without checking Discriminator
-//     var panelMember = await _context.Set<PanelMember>().Include(pm => pm.ParentGuardian).SingleOrDefaultAsync(pm => pm.Id == userId);
-
-//     if (panelMember == null)
-//     {
-//         _logger.LogWarning($"Panel member not found for user ID: {userId}");
-//         return NotFound($"Panel member not found for user ID: {userId}");
-//     }
-
-//     return panelMember;
-// }
-
-[HttpGet]
-public async Task<ActionResult<PanelMember>> GetPanelMember()
-{
-    string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    _logger.LogInformation($"Attempting to retrieve panel member for user ID: {userId}");
-
-    if (string.IsNullOrEmpty(userId))
-    {
-        _logger.LogWarning("User ID claim not found in the token.");
-        return NotFound("User ID claim not found in the token.");
-    }
-
-    Guid parsedUserId;
-    if (!Guid.TryParse(userId, out parsedUserId))
-    {
-        _logger.LogWarning($"User ID is not in a valid GUID format: {userId}");
-        return NotFound("User ID is not a valid GUID.");
-    }
-
-    var panelMember = await _context.Users
-        .OfType<PanelMember>()
-        .Include(pm => pm.ParentGuardian)
-        .SingleOrDefaultAsync(pm => pm.Id == parsedUserId.ToString());
-
-    // Log the query for debugging.
-    _logger.LogInformation(_context.Users.ToQueryString());
-
-    if (panelMember == null)
-    {
-        _logger.LogWarning($"Panel member not found for user ID: {userId}");
-        return NotFound($"Panel member not found for user ID: {userId}");
-    }
-
-    return panelMember;
-}
-
-
-
-
-    [HttpPost]
-    public async Task<ActionResult<PanelMember>> PostPanelMember(PanelMember panelMember)
-    {
-        _context.PanelMembers.Add(panelMember);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetPanelMember), new { id = panelMember.Id }, panelMember);
-    }
-
-    [HttpPut("{id}"), Authorize]
-    public async Task<IActionResult> PutPanelMember(string id, PanelMember panelMember)
+    [HttpPut("{id:guid}"), Authorize]
+    public async Task<IActionResult> PutPanelMember(Guid id, PanelMember panelMember)
     {
         if (id != panelMember.Id)
         {
@@ -194,13 +101,13 @@ public async Task<ActionResult<PanelMember>> GetPanelMember()
         return NoContent();
     }
 
-    private bool PanelMemberExists(string id)
+    private bool PanelMemberExists(Guid id)
     {
         return _context.PanelMembers.Any(e => e.Id == id);
     }
 
-    [HttpDelete("{id}"), Authorize]
-    public async Task<IActionResult> DeletePanelMember(string id)
+    [HttpDelete("{id:guid}"), Authorize]
+    public async Task<IActionResult> DeletePanelMember(Guid id)
     {
         var panelMember = await _context.PanelMembers.FindAsync(id);
         if (panelMember == null)
@@ -212,5 +119,11 @@ public async Task<ActionResult<PanelMember>> GetPanelMember()
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<PanelMember>>> GetPanelMembers()
+    {
+        return await _context.PanelMembers.ToListAsync();
     }
 }

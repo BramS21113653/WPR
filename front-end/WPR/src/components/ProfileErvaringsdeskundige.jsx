@@ -19,12 +19,11 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    // Your fetch logic here to load the user's profile data
-    // Make sure you handle the authorization header correctly
+    // Fetch logic here to load the user's profile data
     const token = localStorage.getItem('jwtToken');
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`https://localhost:5001/PanelMember`, {
+        const response = await fetch(`https://localhost:5001/PanelMember/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -33,7 +32,23 @@ const Profile = () => {
           throw new Error(`Error ${response.status}: ${await response.text()}`);
         }
         const data = await response.json();
-        setProfileData(data);
+    
+        // Map the properties from the response to your state object
+        setProfileData({
+          voornaam: data.firstName, // Map 'FirstName' from the response to 'voornaam' in the state
+          achternaam: data.lastName, // Map 'LastName' from the response to 'achternaam' in the state
+          postcode: data.postCode, // Map 'PostCode' from the response to 'postcode' in the state
+          email: data.email, // Email should match directly
+          telefoonnummer: data.phoneNumber, // Map 'PhoneNumber' from the response to 'telefoonnummer' in the state
+          typeBeperking: data.disabilityType, // Map 'DisabilityType' from the response to 'typeBeperking' in the state
+          hulpmiddelen: data.usedAssistiveTools, // Map 'UsedAssistiveTools' from the response to 'hulpmiddelen' in the state
+          aandoening: data.conditionDisease, // Map 'ConditionDisease' from the response to 'aandoening' in the state
+          onderzoeksvoorkeuren: data.preferredResearchTypes, // Map 'PreferredResearchTypes' from the response to 'onderzoeksvoorkeuren' in the state
+          benaderingsvoorkeur: data.preferredApproach, // Map 'PreferredApproach' from the response to 'benaderingsvoorkeur' in the state
+          toestemmingCommercieel: data.consentForCommercialApproach, // Map 'ConsentForCommercialApproach' from the response to 'toestemmingCommercieel' in the state
+          beschikbaarheid: data.availabilityTimes, // Map 'AvailabilityTimes' from the response to 'beschikbaarheid' in the state
+          ouderInfo: data.relationToPanelMember, // Map 'RelationToPanelMember' from the response to 'ouderInfo' in the state
+        });
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }

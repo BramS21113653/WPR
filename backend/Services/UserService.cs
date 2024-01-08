@@ -76,19 +76,19 @@ public class UserService : IUserService
 
     private string GenerateJwtToken(ApplicationUser user)
     {
-        if (string.IsNullOrWhiteSpace(_appSettings.SecretKey)) // Use SecretKey here
+        if (string.IsNullOrWhiteSpace(_appSettings.SecretKey))
         {
             throw new InvalidOperationException("JWT Secret key is not configured properly.");
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey); // Use SecretKey here
+        var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] 
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Convert Guid to string
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 // Add more claims as needed
             }),
             Expires = DateTime.UtcNow.AddDays(7),

@@ -3,7 +3,7 @@ public class Research
     public string Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    public string ConductorId { get; set; } // FK to BusinessUser or Administrator
+    public Guid ConductorId { get; set; } // Changed from string to Guid
     public DateTime DateTime { get; set; }
     public string LocationOnline { get; set; }
     public string Reward { get; set; }

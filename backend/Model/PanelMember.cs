@@ -10,9 +10,14 @@ public class PanelMember : ApplicationUser
     public string AvailabilityTimes { get; set; } // JSON string or separate table
 
     // Foreign key for ParentGuardian
-    public string ParentGuardianId { get; set; } 
-    public ParentGuardian ParentGuardian { get; set; }
-    public string AdministratorId { get; set; }
+    // public string ParentGuardianId { get; set; } 
+    // public ParentGuardian ParentGuardian { get; set; }
+
+    public Guid? ParentGuardianId { get; set; }  // Changed from string to Guid
+    public virtual ParentGuardian ParentGuardian { get; set; }
+
+    // todo: wijs een administrator toe bij het aanmaken van een panelmember en haal de nullable weg hier!!!
+    public Guid? AdministratorId { get; set; } // Nullable for now 
 
     // Navigation properties
     public virtual ICollection<Participation> Participations { get; set; }
