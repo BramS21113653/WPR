@@ -54,10 +54,12 @@ const App = () => {
               <ErvaringsdeskundigenPortaal />
             } />
             <Route path="/bedrijfsportal" element={
-              <PrivateRoute><BedrijfsPortaal /></PrivateRoute>
+              // <PrivateRoute><BedrijfsPortaal /></PrivateRoute>
+              <BedrijfsPortaal />
             } />
             <Route path="/beheerdersportal" element={
-              <PrivateRoute><BeheerdersPortaal /></PrivateRoute>
+              // <PrivateRoute><BeheerdersPortaal /></PrivateRoute>
+              <BeheerdersPortaal />
             } />
           </Routes>
         </div>
