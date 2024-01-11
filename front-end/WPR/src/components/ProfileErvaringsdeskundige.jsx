@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
 
-const Profile = () => {
+const ProfileErvaringsdeskundige = () => {
+  console.log('ProfielComponent is rendering'); // Debug log
+
   const [profileData, setProfileData] = useState({
     voornaam: '',
     achternaam: '',
@@ -246,4 +248,4 @@ const Profile = () => {
   );  
 };
 
-export default Profile;
+export default ProfileErvaringsdeskundige;

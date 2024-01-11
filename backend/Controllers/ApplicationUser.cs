@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [ApiController]
 [Route("[controller]")]
@@ -24,47 +25,58 @@ public class ApplicationUserController : ControllerBase
         return await _context.Users.ToListAsync();
     }
     
-    // [AllowAnonymous]
-    // [HttpPost("register")]
-    // public async Task<IActionResult> Register(RegisterRequest model)
-    // {
-    //     var result = await _userService.Register(model);
-    //     if (result.Succeeded)
-    //     {
-    //         return Ok(new { message = "Registration successful" });
-    //     }
 
-    //     // If the registration was not successful, send back the list of errors
-    //     var errors = result.Errors.Select(e => e.Description).ToList();
-    //     return BadRequest(new { errors });
-    // }
-
-[HttpPost("register")]
-public async Task<ActionResult> RegisterUser([FromBody] RegisterRequest model)
-{
-    var result = await _userService.Register(model);
-    if (result.Succeeded)
+    [HttpGet("userinfo")]
+    [Authorize]
+    public async Task<IActionResult> GetUserInfo()
     {
-        return Ok("User registered as PanelMember");
-    }
-    else
-    {
-        return BadRequest(result.Errors);
-    }
-}
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userIdString == null)
+        {
+            return Unauthorized(new { message = "Invalid token" });
+        }
 
-[AllowAnonymous]
-[HttpPost("authenticate")]
-public async Task<IActionResult> Authenticate(AuthenticateRequest model)
-{
-    var response = await _userService.Authenticate(model);
-    if (response != null)
-    {
-        return Ok(response);
-    }
-    // Return an appropriate response, e.g. Unauthorized
-    return Unauthorized(new { message = "Authentication failed" });
-}
+        if (!Guid.TryParse(userIdString, out Guid userId))
+        {
+            return BadRequest(new { message = "Invalid user ID format." });
+        }
 
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+
+        // Create a user info object to return. Avoid sending sensitive data.
+        var userInfo = new { user.Id, user.UserName, user.Email };
+        return Ok(userInfo);
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult> RegisterUser([FromBody] RegisterRequest model)
+    {
+        var result = await _userService.Register(model);
+        if (result.Succeeded)
+        {
+            return Ok("User registered as PanelMember");
+        }
+        else
+        {
+            return BadRequest(result.Errors);
+        }
+    }
+
+    [AllowAnonymous]
+    [HttpPost("authenticate")]
+    public async Task<IActionResult> Authenticate(AuthenticateRequest model)
+    {
+        var response = await _userService.Authenticate(model);
+        if (response != null)
+        {
+            return Ok(response);
+        }
+        // Return an appropriate response, e.g. Unauthorized
+        return Unauthorized(new { message = "Authentication failed" });
+    }
     // Additional CRUD methods (GET by ID, POST, PUT, DELETE) can be added here
 }
