@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.JsonPatch;
 
 [ApiController]
 [Route("[controller]")]
@@ -72,35 +73,44 @@ public async Task<ActionResult<PanelMember>> GetProfile()
 }
 
 
-    [HttpPut("{id:guid}"), Authorize]
-    public async Task<IActionResult> PutPanelMember(Guid id, PanelMember panelMember)
-    {
-        if (id != panelMember.Id)
-        {
-            return BadRequest();
-        }
+[HttpPut("{id:guid}"), Authorize]
+public async Task<IActionResult> PutPanelMember(Guid id, JsonPatchDocument<PanelMember> patchDoc)
+{
+  if (!PanelMemberExists(id))
+  {
+      return NotFound();
+  }
 
-        _context.Entry(panelMember).State = EntityState.Modified;
+  var panelMember = await _context.PanelMembers.FindAsync(id);
 
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!PanelMemberExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+  patchDoc.ApplyTo(panelMember, error =>
+  {
+      ModelState.TryAddModelError(string.Empty, error.ErrorMessage);
+  });
 
-        return NoContent();
-    }
+  if (!ModelState.IsValid)
+  {
+      return BadRequest(ModelState);
+  }
 
+  try
+  {
+      await _context.SaveChangesAsync();
+  }
+  catch (DbUpdateConcurrencyException)
+  {
+      if (!PanelMemberExists(id))
+      {
+          return NotFound();
+      }
+      else
+      {
+          throw;
+      }
+  }
+
+  return NoContent();
+}
     private bool PanelMemberExists(Guid id)
     {
         return _context.PanelMembers.Any(e => e.Id == id);

@@ -5,6 +5,7 @@ const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
 
   const [profileData, setProfileData] = useState({
+    id: '', 
     voornaam: '',
     achternaam: '',
     postcode: '',
@@ -41,6 +42,7 @@ const ProfileErvaringsdeskundige = () => {
     
         // Map the properties from the response to your state object
         setProfileData({
+          id: data.id,
           voornaam: data.firstName, // Map 'FirstName' from the response to 'voornaam' in the state
           achternaam: data.lastName, // Map 'LastName' from the response to 'achternaam' in the state
           postcode: data.postCode, // Map 'PostCode' from the response to 'postcode' in the state
