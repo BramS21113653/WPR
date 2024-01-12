@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http; // Required for IFormFile
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO; // Required for MemoryStream
 
 [ApiController]
 [Route("[controller]")]
@@ -15,16 +17,28 @@ public class ResearchController : ControllerBase
         _context = context;
     }
 
+    private string ConvertToBase64(byte[] imageData)
+{
+    return imageData == null ? null : Convert.ToBase64String(imageData);
+}
+
     // GET: /Research
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Research>>> GetResearches()
+    public async Task<ActionResult<IEnumerable<object>>> GetResearches()
     {
-        return await _context.Researches.ToListAsync();
+        var researches = await _context.Researches.ToListAsync();
+        return researches.Select(r => new 
+        {
+            r.Id,
+            r.Title,
+            r.Description,
+            ImageData = ConvertToBase64(r.ImageData)
+        }).ToList();
     }
 
     // GET: /Research/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<Research>> GetResearch(string id)
+    public async Task<ActionResult<object>> GetResearch(string id)
     {
         var research = await _context.Researches.FindAsync(id);
 
@@ -33,18 +47,35 @@ public class ResearchController : ControllerBase
             return NotFound();
         }
 
-        return research;
+        return new
+        {
+            research.Id,
+            research.Title,
+            research.Description,
+            ImageData = ConvertToBase64(research.ImageData)
+        };
     }
 
     // POST: /Research
+    // POST: /Research
     [HttpPost]
-    public async Task<ActionResult<Research>> PostResearch(Research research)
+    public async Task<ActionResult<Research>> PostResearch([FromForm] Research research, IFormFile imageFile)
     {
+        if (imageFile != null && imageFile.Length > 0)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await imageFile.CopyToAsync(memoryStream);
+                research.ImageData = memoryStream.ToArray();
+            }
+        }
+
         _context.Researches.Add(research);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction("GetResearch", new { id = research.Id }, research);
     }
+
 
     // PUT: /Research/{id}
     // DELETE: /Research/{id}

@@ -10,6 +10,8 @@ public class Research
     public string ResearchType { get; set; }
     public string Status { get; set; }
 
+    public byte[] ImageData { get; set; }
+
     // Navigation properties
     public virtual BusinessUser Conductor { get; set; }
     public virtual ICollection<Participation> Participations { get; set; }

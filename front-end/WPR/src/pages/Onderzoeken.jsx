@@ -33,8 +33,9 @@ const Onderzoeken = () => {
           <div key={onderzoek.id} className="onderzoek-item">
             <h2>{onderzoek.title}</h2>
             <p>{onderzoek.description}</p>
-            {/* Placeholder image for now */}
-            <img src="path-to-your-default-image.jpg" alt={onderzoek.title} />
+            {onderzoek.imageData && 
+              <img src={`data:image/jpeg;base64,${onderzoek.imageData}`} alt={onderzoek.title} />
+            }
             <p>Locatie: {onderzoek.locationOnline}</p>
             <p>Type: {onderzoek.researchType}</p>
             <p>Status: {onderzoek.status}</p>
