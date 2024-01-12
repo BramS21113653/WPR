@@ -20,6 +20,10 @@ const ProfileErvaringsdeskundige = () => {
     ouderInfo: '',
   });
 
+  const [researches, setResearches] = useState([]);
+  const [likedResearches, setLikedResearches] = useState(new Set());
+
+
   useEffect(() => {
     // Fetch logic here to load the user's profile data
     const token = localStorage.getItem('jwtToken');
@@ -57,7 +61,24 @@ const ProfileErvaringsdeskundige = () => {
     };
 
     fetchProfileData();
-  }, []);
+
+    const fetchResearches = async () => {
+      try {
+        const response = await fetch('https://localhost:5001/Research', {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setResearches(data);
+      } catch (error) {
+        console.error('Error fetching researches:', error);
+      }
+    };
+  
+      fetchResearches();
+    }, []);
 
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
@@ -110,6 +131,38 @@ const ProfileErvaringsdeskundige = () => {
       // Handle additional logic after deletion, like redirecting
     } catch (error) {
       console.error('Error deleting profile:', error);
+    }
+  };
+
+  const handleLikeResearch = async (researchId) => {
+    const token = localStorage.getItem('jwtToken');
+    try {
+      const response = await fetch(`https://localhost:5001/Research/like/${researchId}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to like research');
+      }
+      setLikedResearches(new Set([...likedResearches, researchId]));
+    } catch (error) {
+      console.error('Error liking research:', error);
+    }
+  };
+
+  const handleUnlikeResearch = async (researchId) => {
+    const token = localStorage.getItem('jwtToken');
+    try {
+      const response = await fetch(`https://localhost:5001/Research/unlike/${researchId}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to unlike research');
+      }
+      setLikedResearches(new Set([...likedResearches].filter(id => id !== researchId)));
+    } catch (error) {
+      console.error('Error unliking research:', error);
     }
   };
 
@@ -244,8 +297,26 @@ const ProfileErvaringsdeskundige = () => {
           Verwijderen
         </Button>
       </form>
+      <div>
+        <Typography variant="h6">Beschikbare Onderzoeken</Typography>
+        {researches.map(research => (
+          <div key={research.id}>
+            <Typography variant="body1">{research.title}</Typography>
+            {likedResearches.has(research.id) ? (
+              <Button onClick={() => handleUnlikeResearch(research.id)}>
+                Unlike
+              </Button>
+            ) : (
+              <Button onClick={() => handleLikeResearch(research.id)}>
+                Like
+              </Button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );  
 };
 
 export default ProfileErvaringsdeskundige;
+

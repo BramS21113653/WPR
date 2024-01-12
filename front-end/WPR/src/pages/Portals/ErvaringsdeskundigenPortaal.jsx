@@ -8,7 +8,7 @@ const ErvaringsdeskundigenPortaal = () => {
     <div className="main-content">
       <h1>Evaringsdeskundigenportaal</h1>
       <ProfielComponent />
-      <OnderzoekenOverzicht />
+      {/* <OnderzoekenOverzicht /> */}
       <ChatInterface />
     </div>
   );

@@ -50,6 +50,7 @@ const App = () => {
             <Route path="partners" element={<Partners />} />
             {/* Beveiligde routes */}
             <Route path="/ervaringsdeskundigen-portal" element={
+              // todo fix privaterouting (component not rendering when logged in, redirect when logged out is working properly)
               // <PrivateRoute><ErvaringsdeskundigenPortaal /></PrivateRoute>
               <ErvaringsdeskundigenPortaal />
             } />
