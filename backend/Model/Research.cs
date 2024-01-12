@@ -13,4 +13,6 @@ public class Research
     // Navigation properties
     public virtual BusinessUser Conductor { get; set; }
     public virtual ICollection<Participation> Participations { get; set; }
+
+    public ICollection<ResearchInterest> ResearchInterests { get; set; }
 }

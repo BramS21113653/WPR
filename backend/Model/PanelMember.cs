@@ -23,4 +23,6 @@ public class PanelMember : ApplicationUser
     public virtual ICollection<Participation> Participations { get; set; }
 
     public virtual Administrator Administrator { get; set; }
+
+    public ICollection<ResearchInterest> ResearchInterests { get; set; }
 }

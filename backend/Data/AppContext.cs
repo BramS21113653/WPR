@@ -18,6 +18,8 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
     public DbSet<BusinessUser> BusinessUsers { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
 
+    public DbSet<ResearchInterest> ResearchInterests { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -90,5 +92,19 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
             .WithOne(pm => pm.ParentGuardian)
             .HasForeignKey(pm => pm.ParentGuardianId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // ResearchInterest relaties tussen research en panelmember (tussentabel)
+        modelBuilder.Entity<ResearchInterest>()
+            .HasKey(ri => new { ri.PanelMemberId, ri.ResearchId });
+
+        modelBuilder.Entity<ResearchInterest>()
+            .HasOne(ri => ri.PanelMember)
+            .WithMany(pm => pm.ResearchInterests)
+            .HasForeignKey(ri => ri.PanelMemberId);
+
+        modelBuilder.Entity<ResearchInterest>()
+            .HasOne(ri => ri.Research)
+            .WithMany(r => r.ResearchInterests)
+            .HasForeignKey(ri => ri.ResearchId);
     }
 }
