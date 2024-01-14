@@ -9,16 +9,22 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel (Web Server)
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // Listen for HTTP on port 5000
+    // serverOptions.ListenAnyIP(5001, listenOptions => // Listen for HTTPS on port 5001
+    // {
+    //     listenOptions.UseHttps(); // You can specify the certificate here for production
+    // });
+});
+
 // Add DbContext with MariaDB configuration
 builder.Services.AddDbContext<AppContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("AppContext"), 
     new MariaDbServerVersion(new Version(10, 5))));
 
-// // Add Identity
-// builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-//     .AddEntityFrameworkStores<AppContext>()
-//     .AddDefaultTokenProviders();
-
+// Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
         .AddEntityFrameworkStores<AppContext>()
         .AddDefaultTokenProviders();
@@ -59,7 +65,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("https://localhost:3000", "https://localhost:5173", "http://localhost:5173", "https://localhost:5174", "http://localhost:5174")
+        builder => builder.WithOrigins("http://accessibility.steenkamp.eu", "https://localhost:3000", "https://localhost:5173", "http://localhost:5173", "https://localhost:5174", "http://localhost:5174")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
