@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class ic : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -333,6 +333,32 @@ namespace backend.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ResearchInterests",
+                columns: table => new
+                {
+                    PanelMemberId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ResearchId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResearchInterests", x => new { x.PanelMemberId, x.ResearchId });
+                    table.ForeignKey(
+                        name: "FK_ResearchInterests_AspNetUsers_PanelMemberId",
+                        column: x => x.PanelMemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ResearchInterests_Researches_ResearchId",
+                        column: x => x.ResearchId,
+                        principalTable: "Researches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -409,6 +435,11 @@ namespace backend.Migrations
                 name: "IX_Researches_ConductorId",
                 table: "Researches",
                 column: "ConductorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResearchInterests_ResearchId",
+                table: "ResearchInterests",
+                column: "ResearchId");
         }
 
         /// <inheritdoc />
@@ -434,6 +465,9 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Participations");
+
+            migrationBuilder.DropTable(
+                name: "ResearchInterests");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
