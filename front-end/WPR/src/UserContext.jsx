@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { API_BASE_URL } from './../apiConfig';
 
 export const UserContext = createContext();
 
@@ -16,7 +17,7 @@ export const UserProvider = ({ children }) => {
    if (token) {
      // Fetch user info based on token
      try {
-       const response = await fetch('https://localhost:5001/ApplicationUser/userinfo', {
+       const response = await fetch(`${API_BASE_URL}/ApplicationUser/userinfo`, {
          headers: { Authorization: `Bearer ${token}` },
        });
        if (response.ok) {

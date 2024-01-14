@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../../apiConfig';
 
 const Onderzoeken = () => {
   const [onderzoeken, setOnderzoeken] = useState([]);
@@ -7,7 +8,7 @@ const Onderzoeken = () => {
   useEffect(() => {
     const fetchResearches = async () => {
       try {
-        const response = await fetch('https://localhost:5001/Research');
+        const response = await fetch(`${API_BASE_URL}/Research`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

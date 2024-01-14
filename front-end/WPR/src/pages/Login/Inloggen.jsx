@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
 import { UserContext } from '../../UserContext';
 import { useNavigate } from 'react-router-dom'; 
+import { API_BASE_URL } from '../../../apiConfig';
 
 const Inloggen = () => {
  const { setUser } = useContext(UserContext);
@@ -10,7 +11,7 @@ const Inloggen = () => {
 
  const onSubmit = async (data) => {
    try {
-     const response = await fetch('https://localhost:5001/ApplicationUser/authenticate', {
+      const response = await fetch(`${API_BASE_URL}/ApplicationUser/authenticate`, {
        method: 'POST',
        headers: {
          'Content-Type': 'application/json',
