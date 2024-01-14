@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20240108165732_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240112141952_ic")]
+    partial class ic
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -327,6 +327,21 @@ namespace backend.Migrations
                     b.ToTable("Researches");
                 });
 
+            modelBuilder.Entity("ResearchInterest", b =>
+                {
+                    b.Property<Guid>("PanelMemberId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ResearchId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("PanelMemberId", "ResearchId");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("ResearchInterests");
+                });
+
             modelBuilder.Entity("Administrator", b =>
                 {
                     b.HasBaseType("ApplicationUser");
@@ -361,7 +376,8 @@ namespace backend.Migrations
                 {
                     b.HasBaseType("ApplicationUser");
 
-                    b.Property<Guid>("AdministratorId")
+                    b.Property<Guid?>("AdministratorId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AvailabilityTimes")
@@ -379,7 +395,8 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("ParentGuardianId")
+                    b.Property<Guid?>("ParentGuardianId")
+                        .IsRequired()
                         .HasColumnType("char(36)");
 
                     b.Property<string>("PostCode")
@@ -524,6 +541,25 @@ namespace backend.Migrations
                     b.Navigation("Conductor");
                 });
 
+            modelBuilder.Entity("ResearchInterest", b =>
+                {
+                    b.HasOne("PanelMember", "PanelMember")
+                        .WithMany("ResearchInterests")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Research", "Research")
+                        .WithMany("ResearchInterests")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
+                });
+
             modelBuilder.Entity("PanelMember", b =>
                 {
                     b.HasOne("Administrator", "Administrator")
@@ -553,6 +589,8 @@ namespace backend.Migrations
             modelBuilder.Entity("Research", b =>
                 {
                     b.Navigation("Participations");
+
+                    b.Navigation("ResearchInterests");
                 });
 
             modelBuilder.Entity("Administrator", b =>
@@ -570,6 +608,8 @@ namespace backend.Migrations
             modelBuilder.Entity("PanelMember", b =>
                 {
                     b.Navigation("Participations");
+
+                    b.Navigation("ResearchInterests");
                 });
 
             modelBuilder.Entity("ParentGuardian", b =>
