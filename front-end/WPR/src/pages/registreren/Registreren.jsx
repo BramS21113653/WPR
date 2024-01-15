@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Registreren.css';
+import { API_BASE_URL } from '../../../apiConfig';
 
 const Registreren = () => {
   // State to hold form data
@@ -52,7 +53,7 @@ const Registreren = () => {
     }
 
     try {
-      const response = await fetch('https://localhost:5001/ApplicationUser/register', {
+      const response = await fetch(`${API_BASE_URL}/ApplicationUser/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
