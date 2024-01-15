@@ -9,7 +9,7 @@ const ErvaringsdeskundigenPortaal = () => {
       <h1>Evaringsdeskundigenportaal</h1>
       <ProfielComponent />
       {/* <OnderzoekenOverzicht /> */}
-      <ChatInterface />
+      {/* <ChatInterface /> */}
     </div>
   );
 };
