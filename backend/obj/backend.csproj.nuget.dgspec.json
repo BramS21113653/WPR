@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bram\\WPR\\backend\\backend.csproj": {}
+    "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bram\\WPR\\backend\\backend.csproj": {
+    "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bram\\WPR\\backend\\backend.csproj",
+        "projectUniqueName": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\bram\\WPR\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\bram\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bram\\WPR\\backend\\obj\\",
+        "projectPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
+        "packagesPath": "/Users/bramsteenkamp/.nuget/packages/",
+        "outputPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\bram\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/bramsteenkamp/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -106,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.403/RuntimeIdentifierGraph.json"
         }
       }
     }

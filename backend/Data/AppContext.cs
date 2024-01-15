@@ -17,8 +17,10 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
     public DbSet<PanelMember> PanelMembers { get; set; }
     public DbSet<BusinessUser> BusinessUsers { get; set; }
     public DbSet<Administrator> Administrators { get; set; }
-
     public DbSet<ResearchInterest> ResearchInterests { get; set; }
+    public DbSet<Chat> Chats { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +33,29 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
             .HasValue<BusinessUser>("BusinessUser")
             .HasValue<Administrator>("Administrator");
             // Add other derived types as needed
+
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.PanelMember)
+            .WithMany() // Afhankelijk van je relatie
+            .HasForeignKey(c => c.PanelMemberId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.BusinessUser)
+            .WithMany() // Afhankelijk van je relatie
+            .HasForeignKey(c => c.BusinessUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ChatMessage>()
+            .HasOne(cm => cm.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(cm => cm.ChatId);
+
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.Research)
+            .WithMany()
+            .HasForeignKey(c => c.ResearchId)
+            .OnDelete(DeleteBehavior.Restrict); 
 
         // Message Relationships
         modelBuilder.Entity<Message>()
