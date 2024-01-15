@@ -62,3 +62,5 @@ bower_components/
 *.gz
 *.rar
 *.7z
+backend/bin/Debug/net7.0/backend.exe
+backend/bin/Debug/net7.0/backend.dll
