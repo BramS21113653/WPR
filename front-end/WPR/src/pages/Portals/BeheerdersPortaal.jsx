@@ -1,7 +1,7 @@
 import React from 'react';
 import GebruikersBeheer from '../../components/GebruikersBeheer';
 import OnderzoekenBeheer from '../../components/OnderzoekenBeheer';
-import ChatInterface from '../../components/ChatInterface';
+import ChatInterface from '../../components/ChatComponent';
 
 const BeheerdersPortal = () => {
   return (
@@ -9,7 +9,6 @@ const BeheerdersPortal = () => {
       <h1>Beheerdersportaal</h1>
       <GebruikersBeheer />
       <OnderzoekenBeheer />
-      <ChatInterface />
     </div>
   );
 };

@@ -27,8 +27,9 @@ const Inloggen = () => {
      }
 
      const responseData = await response.json();
-     localStorage.setItem('jwtToken', responseData.token); // Store the JWT token in localStorage
-     setUser({ isLoggedIn: true, userInfo: responseData.user }); // Update the user status in the context
+     localStorage.setItem('jwtToken', responseData.token);
+     localStorage.setItem('userId', responseData.user.id); // Zorg ervoor dat de ID correct wordt opgeslagen
+     setUser({ isLoggedIn: true, userInfo: responseData.user });
 
      navigate('/'); // Redirect to the homepage after successful login
    } catch (error) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
+import ChatComponent from './ChatComponent'; 
 
 const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
@@ -24,7 +25,18 @@ const ProfileErvaringsdeskundige = () => {
 
   const [researches, setResearches] = useState([]);
   const [likedResearches, setLikedResearches] = useState(new Set());
+  const [showChat, setShowChat] = useState(false); // State om te bepalen of de chat zichtbaar moet zijn
+  const [selectedResearchId, setSelectedResearchId] = useState(null); // State voor het geselecteerde research ID voor de chat
 
+  const handleOpenChat = (researchId) => {
+    setSelectedResearchId(researchId);
+    setShowChat(true);
+  };
+
+  const handleCloseChat = () => {
+    setShowChat(false);
+    setSelectedResearchId(null);
+  };
 
   useEffect(() => {
     // Fetch logic here to load the user's profile data
@@ -306,17 +318,21 @@ const ProfileErvaringsdeskundige = () => {
           <div key={research.id}>
             <Typography variant="body1">{research.title}</Typography>
             {likedResearches.has(research.id) ? (
-              <Button onClick={() => handleUnlikeResearch(research.id)}>
-                Unlike
-              </Button>
+              <Button onClick={() => handleUnlikeResearch(research.id)}>Unlike</Button>
             ) : (
-              <Button onClick={() => handleLikeResearch(research.id)}>
-                Like
-              </Button>
+              <Button onClick={() => handleLikeResearch(research.id)}>Like</Button>
             )}
+            <Button onClick={() => handleOpenChat(research.id)}>Chat</Button>
           </div>
         ))}
       </div>
+
+      {showChat && selectedResearchId && (
+        <ChatComponent
+          researchId={selectedResearchId}
+          handleClose={handleCloseChat}
+        />
+      )}
     </div>
   );  
 };
