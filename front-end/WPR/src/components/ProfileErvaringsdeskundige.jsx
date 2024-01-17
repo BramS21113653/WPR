@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import { API_BASE_URL } from './../../apiConfig';
+import ChatComponent from './ChatComponent'; 
 
 const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
@@ -22,14 +24,25 @@ const ProfileErvaringsdeskundige = () => {
 
   const [researches, setResearches] = useState([]);
   const [likedResearches, setLikedResearches] = useState(new Set());
+  const [showChat, setShowChat] = useState(false); // State om te bepalen of de chat zichtbaar moet zijn
+  const [selectedResearchId, setSelectedResearchId] = useState(null); // State voor het geselecteerde research ID voor de chat
 
+  const handleOpenChat = (researchId) => {
+    setSelectedResearchId(researchId);
+    setShowChat(true);
+  };
+
+  const handleCloseChat = () => {
+    setShowChat(false);
+    setSelectedResearchId(null);
+  };
 
   useEffect(() => {
     // Fetch logic here to load the user's profile data
     const token = localStorage.getItem('jwtToken');
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`https://localhost:5001/PanelMember/profile`, {
+        const response = await fetch(`${API_BASE_URL}/PanelMember/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -64,7 +77,7 @@ const ProfileErvaringsdeskundige = () => {
 
     const fetchResearches = async () => {
       try {
-        const response = await fetch('https://localhost:5001/Research', {
+        const response = await fetch(`${API_BASE_URL}/Research`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!response.ok) {
@@ -94,7 +107,7 @@ const ProfileErvaringsdeskundige = () => {
     // Make sure you handle the authorization header correctly
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`https://localhost:5001/PanelMember/${profileData.id}`, {
+      const response = await fetch(`${API_BASE_URL}/PanelMember/${profileData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +130,7 @@ const ProfileErvaringsdeskundige = () => {
     // Make sure you handle the authorization header correctly
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`https://localhost:5001/PanelMember/${profileData.id}`, {
+      const response = await fetch(`${API_BASE_URL}/PanelMember/${profileData.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -137,7 +150,7 @@ const ProfileErvaringsdeskundige = () => {
   const handleLikeResearch = async (researchId) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`https://localhost:5001/Research/like/${researchId}`, {
+      const response = await fetch(`${API_BASE_URL}/Research/like/${researchId}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -153,7 +166,7 @@ const ProfileErvaringsdeskundige = () => {
   const handleUnlikeResearch = async (researchId) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`https://localhost:5001/Research/unlike/${researchId}`, {
+      const response = await fetch(`${API_BASE_URL}/Research/unlike/${researchId}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -303,17 +316,21 @@ const ProfileErvaringsdeskundige = () => {
           <div key={research.id}>
             <Typography variant="body1">{research.title}</Typography>
             {likedResearches.has(research.id) ? (
-              <Button onClick={() => handleUnlikeResearch(research.id)}>
-                Unlike
-              </Button>
+              <Button onClick={() => handleUnlikeResearch(research.id)}>Unlike</Button>
             ) : (
-              <Button onClick={() => handleLikeResearch(research.id)}>
-                Like
-              </Button>
+              <Button onClick={() => handleLikeResearch(research.id)}>Like</Button>
             )}
+            <Button onClick={() => handleOpenChat(research.id)}>Chat</Button>
           </div>
         ))}
       </div>
+
+      {showChat && selectedResearchId && (
+        <ChatComponent
+          researchId={selectedResearchId}
+          handleClose={handleCloseChat}
+        />
+      )}
     </div>
   );  
 };

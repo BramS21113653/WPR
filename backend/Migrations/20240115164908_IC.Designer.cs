@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20240108171609_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20240115164908_IC")]
+    partial class IC
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,6 +100,60 @@ namespace backend.Migrations
                     b.HasDiscriminator<string>("UserType").HasValue("ApplicationUser");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("BusinessUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PanelMemberId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessUserId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("ChatMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Message", b =>
@@ -268,9 +322,8 @@ namespace backend.Migrations
                     b.Property<Guid>("PanelMemberId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ResearchId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -287,8 +340,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Research", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("ConductorId")
                         .HasColumnType("char(36)");
@@ -325,6 +379,21 @@ namespace backend.Migrations
                     b.HasIndex("ConductorId");
 
                     b.ToTable("Researches");
+                });
+
+            modelBuilder.Entity("ResearchInterest", b =>
+                {
+                    b.Property<Guid>("PanelMemberId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("PanelMemberId", "ResearchId");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("ResearchInterests");
                 });
 
             modelBuilder.Entity("Administrator", b =>
@@ -416,6 +485,52 @@ namespace backend.Migrations
                         .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("ParentGuardian");
+                });
+
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.HasOne("BusinessUser", "BusinessUser")
+                        .WithMany()
+                        .HasForeignKey("BusinessUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PanelMember", "PanelMember")
+                        .WithMany()
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Research", "Research")
+                        .WithMany()
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BusinessUser");
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
+                });
+
+            modelBuilder.Entity("ChatMessage", b =>
+                {
+                    b.HasOne("Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Message", b =>
@@ -526,6 +641,25 @@ namespace backend.Migrations
                     b.Navigation("Conductor");
                 });
 
+            modelBuilder.Entity("ResearchInterest", b =>
+                {
+                    b.HasOne("PanelMember", "PanelMember")
+                        .WithMany("ResearchInterests")
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Research", "Research")
+                        .WithMany("ResearchInterests")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
+                });
+
             modelBuilder.Entity("PanelMember", b =>
                 {
                     b.HasOne("Administrator", "Administrator")
@@ -552,9 +686,16 @@ namespace backend.Migrations
                     b.Navigation("MessagesSent");
                 });
 
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("Research", b =>
                 {
                     b.Navigation("Participations");
+
+                    b.Navigation("ResearchInterests");
                 });
 
             modelBuilder.Entity("Administrator", b =>
@@ -572,6 +713,8 @@ namespace backend.Migrations
             modelBuilder.Entity("PanelMember", b =>
                 {
                     b.Navigation("Participations");
+
+                    b.Navigation("ResearchInterests");
                 });
 
             modelBuilder.Entity("ParentGuardian", b =>

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Profile from '../../components/Profile';
 import OpdrachtenBeheer from '../../components/OpdrachtenBeheer';
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import ChatInterface from '../../components/ChatInterface';
 =======
 import ChatComponent from "../../components/ChatComponent"; // Aangepaste import
 import { API_BASE_URL } from '../../../apiConfig';
 >>>>>>> Stashed changes
+=======
+import ChatInterface from '../../components/ChatComponent';
+>>>>>>> main
 
 const BedrijfsPortaal = () => {
   const [researches, setResearches] = useState([]);
@@ -48,6 +52,7 @@ const BedrijfsPortaal = () => {
       <Profile title="Bedrijfsprofiel" />
 <<<<<<< Updated upstream
       <OpdrachtenBeheer title="Beheer Onderzoeksopdrachten" />
+<<<<<<< HEAD
       <ChatInterface title="Chat met Deelnemers en Accessibility" />
 =======
       <OpdrachtenBeheer 
@@ -62,6 +67,8 @@ const BedrijfsPortaal = () => {
         />
       )}
 >>>>>>> Stashed changes
+=======
+>>>>>>> main
     </div>
   );
 };

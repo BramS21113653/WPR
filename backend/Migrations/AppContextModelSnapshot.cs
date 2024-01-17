@@ -99,6 +99,60 @@ namespace backend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("BusinessUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PanelMemberId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessUserId");
+
+                    b.HasIndex("PanelMemberId");
+
+                    b.HasIndex("ResearchId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("ChatMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("Message", b =>
                 {
                     b.Property<string>("Id")
@@ -265,9 +319,8 @@ namespace backend.Migrations
                     b.Property<Guid>("PanelMemberId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ResearchId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -284,8 +337,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Research", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("ConductorId")
                         .HasColumnType("char(36)");
@@ -326,6 +380,44 @@ namespace backend.Migrations
                     b.HasIndex("ConductorId");
 
                     b.ToTable("Researches");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a6ce7b40-5f15-4442-a6ff-1926817c4d09"),
+                            ConductorId = new Guid("5dcefc08-f364-46b8-ac58-9e87938ccaf9"),
+                            DateTime = new DateTime(2024, 1, 16, 0, 21, 11, 59, DateTimeKind.Local).AddTicks(4810),
+                            Description = "Exploring the impact of AI technologies in medical diagnostics",
+                            LocationOnline = "Zoom Meeting",
+                            ResearchType = "Qualitative",
+                            Reward = "100 USD Amazon Voucher",
+                            Status = "Open",
+                            Title = "AI in Healthcare"
+                        },
+                        new
+                        {
+                            Id = new Guid("a22147f8-8a54-4ca6-ad66-34ecaa636696"),
+                            ConductorId = new Guid("62f5a822-9367-4f5b-8335-02e11fc21174"),
+                            DateTime = new DateTime(2024, 2, 16, 0, 21, 11, 59, DateTimeKind.Local).AddTicks(4890),
+                            Description = "Studying the latest trends in renewable energy technologies",
+                            LocationOnline = "Microsoft Teams",
+                            ResearchType = "Quantitative",
+                            Reward = "Participation Certificate",
+                            Status = "Planning",
+                            Title = "Renewable Energy Innovations"
+                        },
+                        new
+                        {
+                            Id = new Guid("5b760850-c24f-457b-97aa-2d966e94072b"),
+                            ConductorId = new Guid("c171a09f-9fd7-4b31-a350-c4e6b4f2a545"),
+                            DateTime = new DateTime(2024, 3, 16, 0, 21, 11, 59, DateTimeKind.Local).AddTicks(4910),
+                            Description = "Analyzing sustainable practices in urban development",
+                            LocationOnline = "WebEx",
+                            ResearchType = "Mixed",
+                            Reward = "150 USD Amazon Voucher",
+                            Status = "Open",
+                            Title = "Sustainable Urban Development"
+                        });
                 });
 
             modelBuilder.Entity("ResearchInterest", b =>
@@ -333,8 +425,8 @@ namespace backend.Migrations
                     b.Property<Guid>("PanelMemberId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ResearchId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("ResearchId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("PanelMemberId", "ResearchId");
 
@@ -371,6 +463,77 @@ namespace backend.Migrations
                         .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("BusinessUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5dcefc08-f364-46b8-ac58-9e87938ccaf9"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "17cde92e-c2e9-4d9b-b790-1384b83b11f6",
+                            Email = "john.doe@doeinnovations.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            LastName = "Doe",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JOHN.DOE@DOEINNOVATIONS.COM",
+                            NormalizedUserName = "JOHN.DOE",
+                            PasswordHash = "hashed_password_placeholder",
+                            PhoneNumber = "123-456-7890",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "security_stamp_placeholder",
+                            TwoFactorEnabled = false,
+                            UserName = "john.doe",
+                            CompanyName = "Doe Innovations",
+                            ContactInfo = "john.doe@doeinnovations.com",
+                            Location = "New York, USA",
+                            WebsiteURL = "https://www.doeinnovations.com"
+                        },
+                        new
+                        {
+                            Id = new Guid("62f5a822-9367-4f5b-8335-02e11fc21174"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f7d032d1-cd4b-43c0-8c2c-89c0e46e8a7b",
+                            Email = "jane.smith@smithnetworking.co.uk",
+                            EmailConfirmed = true,
+                            FirstName = "Jane",
+                            LastName = "Smith",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JANE.SMITH@SMITHNETWORKING.CO.UK",
+                            NormalizedUserName = "JANE.SMITH",
+                            PasswordHash = "hashed_password_placeholder",
+                            PhoneNumber = "098-765-4321",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "security_stamp_placeholder",
+                            TwoFactorEnabled = false,
+                            UserName = "jane.smith",
+                            CompanyName = "Smith Networking",
+                            ContactInfo = "jane.smith@smithnetworking.co.uk",
+                            Location = "London, UK",
+                            WebsiteURL = "https://www.smithnetworking.co.uk"
+                        },
+                        new
+                        {
+                            Id = new Guid("c171a09f-9fd7-4b31-a350-c4e6b4f2a545"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "fa92b4ca-91a6-4671-bcdf-5260f3c75fd4",
+                            Email = "alice.johnson@johnsonailabs.de",
+                            EmailConfirmed = true,
+                            FirstName = "Alice",
+                            LastName = "Johnson",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ALICE.JOHNSON@JOHNSONAILABS.DE",
+                            NormalizedUserName = "ALICE.JOHNSON",
+                            PasswordHash = "hashed_password_placeholder",
+                            PhoneNumber = "321-654-0987",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "security_stamp_placeholder",
+                            TwoFactorEnabled = false,
+                            UserName = "alice.johnson",
+                            CompanyName = "Johnson AI Labs",
+                            ContactInfo = "alice.johnson@johnsonailabs.de",
+                            Location = "Berlin, Germany",
+                            WebsiteURL = "https://www.johnsonailabs.de"
+                        });
                 });
 
             modelBuilder.Entity("PanelMember", b =>
@@ -432,6 +595,52 @@ namespace backend.Migrations
                         .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("ParentGuardian");
+                });
+
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.HasOne("BusinessUser", "BusinessUser")
+                        .WithMany()
+                        .HasForeignKey("BusinessUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PanelMember", "PanelMember")
+                        .WithMany()
+                        .HasForeignKey("PanelMemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Research", "Research")
+                        .WithMany()
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BusinessUser");
+
+                    b.Navigation("PanelMember");
+
+                    b.Navigation("Research");
+                });
+
+            modelBuilder.Entity("ChatMessage", b =>
+                {
+                    b.HasOne("Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApplicationUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Message", b =>
@@ -585,6 +794,11 @@ namespace backend.Migrations
                     b.Navigation("MessagesReceived");
 
                     b.Navigation("MessagesSent");
+                });
+
+            modelBuilder.Entity("Chat", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Research", b =>

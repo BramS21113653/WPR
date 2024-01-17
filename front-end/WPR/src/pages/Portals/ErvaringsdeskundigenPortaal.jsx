@@ -1,7 +1,7 @@
 import React from 'react';
 import ProfielComponent from '../../components/ProfileErvaringsdeskundige';
 import OnderzoekenOverzicht from '../../components/OnderzoekenOverzicht';
-import ChatInterface from '../../components/ChatInterface';
+import ChatInterface from '../../components/ChatComponent';
 
 const ErvaringsdeskundigenPortaal = () => {
   return (
@@ -9,7 +9,6 @@ const ErvaringsdeskundigenPortaal = () => {
       <h1>Evaringsdeskundigenportaal</h1>
       <ProfielComponent />
       {/* <OnderzoekenOverzicht /> */}
-      <ChatInterface />
     </div>
   );
 };
