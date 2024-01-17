@@ -21,7 +21,12 @@ public class ChatController : ControllerBase
     [HttpPost("send")]
     public async Task<IActionResult> SendMessage([FromBody] SendMessageModel model)
     {
-        var message = await _chatService.SendMessage(model.ChatId, model.SenderId, model.Content);
-        return Ok(message);
+    if (model.BusinessUserId == null || model.ResearchId == null)
+    {
+        return BadRequest("Both businessUserId and researchId must be provided.");
+    }
+
+    var message = await _chatService.SendMessage(model.ChatId, model.SenderId, model.Content, model.BusinessUserId, model.ResearchId);
+    return Ok(message);
     }
 }

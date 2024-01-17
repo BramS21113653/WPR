@@ -27,15 +27,19 @@ const ProfileErvaringsdeskundige = () => {
   const [likedResearches, setLikedResearches] = useState(new Set());
   const [showChat, setShowChat] = useState(false); // State om te bepalen of de chat zichtbaar moet zijn
   const [selectedResearchId, setSelectedResearchId] = useState(null); // State voor het geselecteerde research ID voor de chat
+  const [selectedBusinessUserId, setSelectedBusinessUserId] = useState(null); // State voor het geselecteerde research ID voor de chat
 
-  const handleOpenChat = (researchId) => {
+  const handleOpenChat = (researchId, businessUserId) => {
+    console.log('Opening chat for:', researchId, businessUserId); // Debug log
     setSelectedResearchId(researchId);
+    setSelectedBusinessUserId(businessUserId);
     setShowChat(true);
-  };
+  };  
 
   const handleCloseChat = () => {
     setShowChat(false);
     setSelectedResearchId(null);
+    setSelectedBusinessUserId(null);
   };
 
   useEffect(() => {
@@ -189,7 +193,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Voornaam"
           variant="outlined"
           name="voornaam"
-          value={profileData.voornaam}
+          value={profileData.voornaam || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -198,7 +202,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Achternaam"
           variant="outlined"
           name="achternaam"
-          value={profileData.achternaam}
+          value={profileData.achternaam || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -207,7 +211,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Postcode"
           variant="outlined"
           name="postcode"
-          value={profileData.postcode}
+          value={profileData.postcode || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -216,7 +220,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Email"
           variant="outlined"
           name="email"
-          value={profileData.email}
+          value={profileData.email || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -225,7 +229,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Telefoonnummer"
           variant="outlined"
           name="telefoonnummer"
-          value={profileData.telefoonnummer}
+          value={profileData.telefoonnummer || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -234,7 +238,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Type beperking"
           variant="outlined"
           name="typeBeperking"
-          value={profileData.typeBeperking}
+          value={profileData.typeBeperking || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -243,7 +247,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Hulpmiddelen"
           variant="outlined"
           name="hulpmiddelen"
-          value={profileData.hulpmiddelen}
+          value={profileData.hulpmiddelen || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -252,7 +256,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Aandoening"
           variant="outlined"
           name="aandoening"
-          value={profileData.aandoening}
+          value={profileData.aandoening || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -261,7 +265,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Onderzoeksvoorkeuren"
           variant="outlined"
           name="onderzoeksvoorkeuren"
-          value={profileData.onderzoeksvoorkeuren}
+          value={profileData.onderzoeksvoorkeuren || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -270,7 +274,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Benaderingsvoorkeur"
           variant="outlined"
           name="benaderingsvoorkeur"
-          value={profileData.benaderingsvoorkeur}
+          value={profileData.benaderingsvoorkeur || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -278,7 +282,7 @@ const ProfileErvaringsdeskundige = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={profileData.toestemmingCommercieel}
+              checked={profileData.toestemmingCommercieel || false} 
               onChange={handleChange}
               name="toestemmingCommercieel"
             />
@@ -289,7 +293,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Beschikbaarheid"
           variant="outlined"
           name="beschikbaarheid"
-          value={profileData.beschikbaarheid}
+          value={profileData.beschikbaarheid || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -298,7 +302,7 @@ const ProfileErvaringsdeskundige = () => {
           label="Informatie van ouder/voogd"
           variant="outlined"
           name="ouderInfo"
-          value={profileData.ouderInfo}
+          value={profileData.ouderInfo || ''} 
           onChange={handleChange}
           margin="normal"
           fullWidth
@@ -314,25 +318,25 @@ const ProfileErvaringsdeskundige = () => {
       </form>
       <div>
         <Typography variant="h6">Beschikbare Onderzoeken</Typography>
-        {researches.map(research => (
-          <div key={research.id}>
-            <Typography variant="body1">{research.title}</Typography>
-            {likedResearches.has(research.id) ? (
-              <Button onClick={() => handleUnlikeResearch(research.id)}>Unlike</Button>
-            ) : (
-              <Button onClick={() => handleLikeResearch(research.id)}>Like</Button>
-            )}
-            <Button onClick={() => handleOpenChat(research.id)}>Chat</Button>
-          </div>
-        ))}
+      {researches.map(research => (
+        <div key={research.id}>
+          <Typography variant="body1">{research.title}</Typography>
+          {likedResearches.has(research.id) ? (
+            <Button onClick={() => handleUnlikeResearch(research.id)}>Unlike</Button>
+          ) : (
+            <Button onClick={() => handleLikeResearch(research.id)}>Like</Button>
+          )}
+          <Button onClick={() => handleOpenChat(research.id, research.conductorId)}>Chat</Button>
+        </div>
+      ))}
       </div>
-
-      {showChat && selectedResearchId && (
-        <ChatComponent
-          researchId={selectedResearchId}
-          handleClose={handleCloseChat}
-        />
-      )}
+    {showChat && (
+      <ChatComponent
+        researchId={selectedResearchId}
+        businessUserId={selectedBusinessUserId}
+        handleClose={handleCloseChat}
+      />
+    )}
     </div>
   );  
 };

@@ -21,20 +21,33 @@ public class ChatService
 
         return chat;
     }
+public async Task<ChatMessage> SendMessage(Guid chatId, Guid senderId, string content, Guid? businessUserId, Guid? researchId)
+{
+    // Check if the chat exists
+    var chat = await _context.Chats.FindAsync(chatId);
 
-    public async Task<ChatMessage> SendMessage(Guid chatId, Guid senderId, string content)
+    // If the chat doesn't exist, create a new one
+    if (chat == null)
     {
-        var message = new ChatMessage
+        // Ensure businessUserId and researchId have values before creating a new chat
+        if (!businessUserId.HasValue || !researchId.HasValue)
         {
-            ChatId = chatId,
-            SenderId = senderId,
-            Content = content,
-            Timestamp = DateTime.UtcNow
-        };
-
-        _context.ChatMessages.Add(message);
-        await _context.SaveChangesAsync();
-
-        return message;
+            throw new InvalidOperationException("Both businessUserId and researchId must be provided to create a new chat.");
+        }
+        chat = await CreateChat(senderId, businessUserId.Value, researchId.Value);
     }
+
+    var message = new ChatMessage
+    {
+        ChatId = chat.Id,
+        SenderId = senderId,
+        Content = content,
+        Timestamp = DateTime.UtcNow
+    };
+
+    _context.ChatMessages.Add(message);
+    await _context.SaveChangesAsync();
+
+    return message;
+}
 }
