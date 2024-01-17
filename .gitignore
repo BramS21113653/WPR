@@ -64,3 +64,5 @@ bower_components/
 *.7z
 backend/bin/Debug/net7.0/backend.exe
 backend/bin/Debug/net7.0/backend.dll
+backend/localhost-key.pem
+backend/localhost.pem

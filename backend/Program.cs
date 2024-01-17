@@ -32,6 +32,7 @@
 
 // // Register IUserService for dependency injection
 // builder.Services.AddScoped<IUserService, UserService>();
+// builder.Services.AddScoped<ChatService>(); // Register ChatService
 
 // // Configure JWT Authentication
 // var jwtSection = builder.Configuration.GetSection("JWT");
@@ -138,6 +139,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
 
 // Register IUserService for dependency injection
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ChatService>(); // Register ChatService
 
 // Configure JWT Authentication
 var jwtSection = builder.Configuration.GetSection("JWT");

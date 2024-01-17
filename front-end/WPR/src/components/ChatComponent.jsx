@@ -15,7 +15,7 @@ const ChatComponent = ({ researchId, handleClose }) => {
       return;
     }
 
-    const ws = new WebSocket(`ws://localhost:3001/chat?userId=${userId}&researchId=${researchId}`);
+    const ws = new WebSocket(`wss://localhost:3001/chat?userId=${userId}&researchId=${researchId}`);
 
     ws.onopen = () => {
       console.log('WebSocket verbonden');
