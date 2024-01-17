@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20240117183603_AddChatsToBusinessUser")]
+    partial class AddChatsToBusinessUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,9 +383,9 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("162a297d-b578-4d63-96a6-e20297c409d7"),
-                            ConductorId = new Guid("b31db3b1-5f46-467d-bce8-e3bb5ce3d22f"),
-                            DateTime = new DateTime(2024, 1, 17, 19, 44, 7, 872, DateTimeKind.Local).AddTicks(3820),
+                            Id = new Guid("c71755de-4644-4f65-bf71-1264c456a83b"),
+                            ConductorId = new Guid("2115639e-1e6f-401b-9f9e-f46c89e06de3"),
+                            DateTime = new DateTime(2024, 1, 17, 19, 36, 3, 452, DateTimeKind.Local).AddTicks(2570),
                             Description = "Exploring the impact of AI technologies in medical diagnostics",
                             LocationOnline = "Zoom Meeting",
                             ResearchType = "Qualitative",
@@ -392,9 +395,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e588e0a1-68d7-4d6f-ad92-e4001142a471"),
-                            ConductorId = new Guid("8bbee4a9-c4a0-4caf-a4c7-7f9a48188932"),
-                            DateTime = new DateTime(2024, 2, 17, 19, 44, 7, 872, DateTimeKind.Local).AddTicks(3930),
+                            Id = new Guid("2e9e4e9c-5c19-4867-a2ff-985a195a6e6d"),
+                            ConductorId = new Guid("2dea9963-1eb5-410a-b363-e517a7613750"),
+                            DateTime = new DateTime(2024, 2, 17, 19, 36, 3, 452, DateTimeKind.Local).AddTicks(2690),
                             Description = "Studying the latest trends in renewable energy technologies",
                             LocationOnline = "Microsoft Teams",
                             ResearchType = "Quantitative",
@@ -404,9 +407,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e13ab0af-cc1f-4514-ad72-179d7511d3bd"),
-                            ConductorId = new Guid("0a5972dc-e689-4673-a7eb-dad2a2852020"),
-                            DateTime = new DateTime(2024, 3, 17, 19, 44, 7, 872, DateTimeKind.Local).AddTicks(3980),
+                            Id = new Guid("f39cfc15-ffe0-4fdb-9900-7d6a79e69cbd"),
+                            ConductorId = new Guid("157b83e2-a5a8-419c-a5b8-52db8b75d064"),
+                            DateTime = new DateTime(2024, 3, 17, 19, 36, 3, 452, DateTimeKind.Local).AddTicks(2740),
                             Description = "Analyzing sustainable practices in urban development",
                             LocationOnline = "WebEx",
                             ResearchType = "Mixed",
@@ -463,9 +466,9 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b31db3b1-5f46-467d-bce8-e3bb5ce3d22f"),
+                            Id = new Guid("2115639e-1e6f-401b-9f9e-f46c89e06de3"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ff7339a-0af4-4909-ab46-1063f61800b8",
+                            ConcurrencyStamp = "d529d343-7fe9-4cc3-8ac1-5f278d064d9e",
                             Email = "john.doe@doeinnovations.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -486,9 +489,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8bbee4a9-c4a0-4caf-a4c7-7f9a48188932"),
+                            Id = new Guid("2dea9963-1eb5-410a-b363-e517a7613750"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7601af6d-20df-4e8e-8e7a-a2cb2fd35e63",
+                            ConcurrencyStamp = "157b3b62-c0c1-4146-aa0d-3ed03620b96b",
                             Email = "jane.smith@smithnetworking.co.uk",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -509,9 +512,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0a5972dc-e689-4673-a7eb-dad2a2852020"),
+                            Id = new Guid("157b83e2-a5a8-419c-a5b8-52db8b75d064"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "66ab9dfa-2adc-48dd-9539-7ee682c8a5ae",
+                            ConcurrencyStamp = "ec31c1e3-7b09-46eb-a119-72c0badbf0eb",
                             Email = "alice.johnson@johnsonailabs.de",
                             EmailConfirmed = true,
                             FirstName = "Alice",

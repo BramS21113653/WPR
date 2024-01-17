@@ -234,6 +234,12 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
             .HasForeignKey(m => m.BusinessUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<BusinessUser>()
+            .HasMany(b => b.Chats)
+            .WithOne(c => c.BusinessUser)
+            .HasForeignKey(c => c.BusinessUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         // ParentGuardian Relationships
         modelBuilder.Entity<ParentGuardian>()
             .HasMany(pg => pg.PanelMembers)
