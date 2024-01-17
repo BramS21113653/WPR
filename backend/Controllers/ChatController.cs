@@ -18,15 +18,28 @@ public class ChatController : ControllerBase
         return Ok(chat);
     }
 
+    // [HttpPost("send")]
+    // public async Task<IActionResult> SendMessage([FromBody] SendMessageModel model)
+    // {
+    // if (model.BusinessUserId == null || model.ResearchId == null)
+    // {
+    //     return BadRequest("Both businessUserId and researchId must be provided.");
+    // }
+
+    // var message = await _chatService.SendMessage(model.ChatId, model.SenderId, model.Content, model.BusinessUserId, model.ResearchId);
+    // return Ok(message);
+    // }
+
+    // Data transfer object now
     [HttpPost("send")]
     public async Task<IActionResult> SendMessage([FromBody] SendMessageModel model)
     {
-    if (model.BusinessUserId == null || model.ResearchId == null)
-    {
-        return BadRequest("Both businessUserId and researchId must be provided.");
-    }
+        if (model.BusinessUserId == null || model.ResearchId == null)
+        {
+            return BadRequest("Both businessUserId and researchId must be provided.");
+        }
 
-    var message = await _chatService.SendMessage(model.ChatId, model.SenderId, model.Content, model.BusinessUserId, model.ResearchId);
-    return Ok(message);
+        var messageDto = await _chatService.SendMessage(model.ChatId, model.SenderId, model.Content, model.BusinessUserId, model.ResearchId);
+        return Ok(messageDto);
     }
 }

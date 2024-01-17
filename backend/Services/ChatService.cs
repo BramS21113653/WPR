@@ -21,7 +21,7 @@ public class ChatService
 
         return chat;
     }
-public async Task<ChatMessage> SendMessage(Guid chatId, Guid senderId, string content, Guid? businessUserId, Guid? researchId)
+public async Task<ChatMessageDto> SendMessage(Guid chatId, Guid senderId, string content, Guid? businessUserId, Guid? researchId)
 {
     // Check if the chat exists
     var chat = await _context.Chats.FindAsync(chatId);
@@ -37,17 +37,23 @@ public async Task<ChatMessage> SendMessage(Guid chatId, Guid senderId, string co
         chat = await CreateChat(senderId, businessUserId.Value, researchId.Value);
     }
 
-    var message = new ChatMessage
-    {
-        ChatId = chat.Id,
-        SenderId = senderId,
-        Content = content,
-        Timestamp = DateTime.UtcNow
-    };
+        var message = new ChatMessage
+        {
+            ChatId = chat.Id,
+            SenderId = senderId,
+            Content = content,
+            Timestamp = DateTime.UtcNow
+        };
 
-    _context.ChatMessages.Add(message);
-    await _context.SaveChangesAsync();
+        _context.ChatMessages.Add(message);
+        await _context.SaveChangesAsync();
 
-    return message;
-}
+        return new ChatMessageDto
+        {
+            Id = message.Id,
+            Content = message.Content,
+            Timestamp = message.Timestamp,
+            SenderId = message.SenderId
+        };
+    }
 }

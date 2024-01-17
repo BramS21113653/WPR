@@ -115,16 +115,30 @@ public class AppContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>,
             .HasForeignKey(c => c.BusinessUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // if you delete a research as a panelmember the bijbehorende chats will also be removed from the db
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.Research)
+            .WithMany()
+            .HasForeignKey(c => c.ResearchId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // modelBuilder.Entity<Chat>()
+        //     .HasOne(c => c.Research)
+        //     .WithMany()
+        //     .HasForeignKey(c => c.ResearchId)
+        //     .OnDelete(DeleteBehavior.Restrict); 
+
         modelBuilder.Entity<ChatMessage>()
             .HasOne(cm => cm.Chat)
             .WithMany(c => c.Messages)
             .HasForeignKey(cm => cm.ChatId);
 
-        modelBuilder.Entity<Chat>()
-            .HasOne(c => c.Research)
-            .WithMany()
-            .HasForeignKey(c => c.ResearchId)
-            .OnDelete(DeleteBehavior.Restrict); 
+        // modelBuilder.Entity<ChatMessage>()
+        //     .HasOne(cm => cm.Chat)
+        //     .WithMany(c => c.Messages)
+        //     .HasForeignKey(cm => cm.ChatId)
+        //     .OnDelete(DeleteBehavior.Restrict)
+        //     .Ignore(cm => cm.Chat.Messages); // Ignore the Messages property in Chat // to solve circular references in my relationships
 
         // Message Relationships
         modelBuilder.Entity<Message>()
