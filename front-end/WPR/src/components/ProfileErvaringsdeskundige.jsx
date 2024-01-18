@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react'; // Add useContext to the import from 'react'
 import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
 import ChatComponent from './ChatComponent'; 
+import { UserContext } from './../UserContext'; 
 
 const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
@@ -28,6 +29,7 @@ const ProfileErvaringsdeskundige = () => {
   const [showChat, setShowChat] = useState(false); // State om te bepalen of de chat zichtbaar moet zijn
   const [selectedResearchId, setSelectedResearchId] = useState(null); // State voor het geselecteerde research ID voor de chat
   const [selectedBusinessUserId, setSelectedBusinessUserId] = useState(null); // State voor het geselecteerde research ID voor de chat
+  const { handleLogout } = useContext(UserContext); // Now useContext is defined and can be used here
 
   const handleOpenChat = (researchId, businessUserId) => {
     console.log('Opening chat for:', researchId, businessUserId); // Debug log
@@ -147,7 +149,7 @@ const ProfileErvaringsdeskundige = () => {
         throw new Error('Delete failed');
       }
       alert('Profile deleted successfully');
-      // Handle additional logic after deletion, like redirecting
+      handleLogout();
     } catch (error) {
       console.error('Error deleting profile:', error);
     }

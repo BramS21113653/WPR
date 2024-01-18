@@ -95,42 +95,37 @@ public class BusinessUserController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id:guid}"), Authorize]
-    public async Task<IActionResult> DeleteBusinessUser(Guid id)
+[HttpDelete("{id:guid}"), Authorize]
+public async Task<IActionResult> DeleteBusinessUser(Guid id)
+{
+    var businessUser = await _context.BusinessUsers
+                                    .Include(bu => bu.Chats) // Include related Chats
+                                    .FirstOrDefaultAsync(bu => bu.Id == id);
+
+    if (businessUser == null)
     {
-        var businessUser = await _context.BusinessUsers
-                                        .Include(bu => bu.Chats) // Include related Chats
-                                        .FirstOrDefaultAsync(bu => bu.Id == id);
-
-        if (businessUser == null)
-        {
-            _logger.LogWarning($"Business user not found with ID: {id}");
-            return NotFound($"Business user not found with ID: {id}");
-        }
-
-        // Check if the business user has related chats
-        if (businessUser.Chats.Any())
-        {
-            // Handle related chats
-            foreach (var chat in businessUser.Chats)
-            {
-                _context.Chats.Remove(chat);
-            }
-        }
-
-        // After handling related data, remove the business user
-        _context.BusinessUsers.Remove(businessUser);
-
-        try
-        {
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"Successfully deleted business user with ID: {id}");
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while deleting business user with ID: {id}");
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the user.");
-        }
+        _logger.LogWarning($"Business user not found with ID: {id}");
+        return NotFound($"Business user not found with ID: {id}");
     }
+
+    // Set PanelMemberId to null for related Chats
+    foreach (var chat in businessUser.Chats)
+    {
+        chat.PanelMemberId = null;
+    }
+
+    _context.BusinessUsers.Remove(businessUser);
+
+    try
+    {
+        await _context.SaveChangesAsync();
+        _logger.LogInformation($"Successfully deleted business user with ID: {id}");
+        return NoContent();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, $"Error occurred while deleting business user with ID: {id}");
+        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the user.");
+    }
+}
 }

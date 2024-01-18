@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20240118111825_testdeletebusinessuser")]
+    partial class testdeletebusinessuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,8 +111,7 @@ namespace backend.Migrations
                     b.Property<Guid>("BusinessUserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("PanelMemberId")
-                        .IsRequired()
+                    b.Property<Guid>("PanelMemberId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid>("ResearchId")
@@ -381,9 +383,9 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b504e1be-0149-41c2-9f9f-edc6f365eee2"),
-                            ConductorId = new Guid("6fd7a419-733b-4ac5-8705-e109e87885a5"),
-                            DateTime = new DateTime(2024, 1, 18, 12, 40, 15, 444, DateTimeKind.Local).AddTicks(6410),
+                            Id = new Guid("c7cbef02-6ad9-48f0-9130-e3b524371e65"),
+                            ConductorId = new Guid("cf46fba3-96ac-449a-a8a3-c4800e930cae"),
+                            DateTime = new DateTime(2024, 1, 18, 12, 18, 24, 908, DateTimeKind.Local).AddTicks(2610),
                             Description = "Exploring the impact of AI technologies in medical diagnostics",
                             LocationOnline = "Zoom Meeting",
                             ResearchType = "Qualitative",
@@ -393,9 +395,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ea3d7ae4-8086-4e3c-944d-a4b133301c57"),
-                            ConductorId = new Guid("0a5cd29a-90b8-486b-93a0-7cd8bb11144e"),
-                            DateTime = new DateTime(2024, 2, 18, 12, 40, 15, 444, DateTimeKind.Local).AddTicks(6470),
+                            Id = new Guid("2574a50b-0f95-4f52-91ce-fd608a0bf1ad"),
+                            ConductorId = new Guid("24d6613c-29f0-4d1f-8a3a-e0f3bcb575b4"),
+                            DateTime = new DateTime(2024, 2, 18, 12, 18, 24, 908, DateTimeKind.Local).AddTicks(2700),
                             Description = "Studying the latest trends in renewable energy technologies",
                             LocationOnline = "Microsoft Teams",
                             ResearchType = "Quantitative",
@@ -405,9 +407,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8598d02b-5023-464f-b450-4a596635428b"),
-                            ConductorId = new Guid("47b86695-6436-4b61-8638-4009df2d0dbc"),
-                            DateTime = new DateTime(2024, 3, 18, 12, 40, 15, 444, DateTimeKind.Local).AddTicks(6480),
+                            Id = new Guid("c7b63247-43e5-4f1c-9617-775268aba152"),
+                            ConductorId = new Guid("0a35304d-ac82-4aa1-8fd1-8b559fd5647e"),
+                            DateTime = new DateTime(2024, 3, 18, 12, 18, 24, 908, DateTimeKind.Local).AddTicks(2720),
                             Description = "Analyzing sustainable practices in urban development",
                             LocationOnline = "WebEx",
                             ResearchType = "Mixed",
@@ -464,9 +466,9 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6fd7a419-733b-4ac5-8705-e109e87885a5"),
+                            Id = new Guid("cf46fba3-96ac-449a-a8a3-c4800e930cae"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5fca0cf6-d3a5-47c7-aadc-141441e953dd",
+                            ConcurrencyStamp = "0618e418-eab1-4500-aae0-65ca48c11e1d",
                             Email = "john.doe@doeinnovations.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -487,9 +489,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0a5cd29a-90b8-486b-93a0-7cd8bb11144e"),
+                            Id = new Guid("24d6613c-29f0-4d1f-8a3a-e0f3bcb575b4"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "498123e4-a632-41c4-b055-a247b7cf41f1",
+                            ConcurrencyStamp = "6ed6ea19-df84-4dab-83fe-3044e77ac8d4",
                             Email = "jane.smith@smithnetworking.co.uk",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -510,9 +512,9 @@ namespace backend.Migrations
                         },
                         new
                         {
-                            Id = new Guid("47b86695-6436-4b61-8638-4009df2d0dbc"),
+                            Id = new Guid("0a35304d-ac82-4aa1-8fd1-8b559fd5647e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fcd9af5f-f966-47f8-9ba3-ac115158a975",
+                            ConcurrencyStamp = "ecebd40c-3b57-48d9-a788-3be91eddc313",
                             Email = "alice.johnson@johnsonailabs.de",
                             EmailConfirmed = true,
                             FirstName = "Alice",

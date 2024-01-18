@@ -22,6 +22,7 @@ import ChatButton from './assets/chat/ChatButton';
 import { UserProvider, UserContext } from './UserContext';
 import './index.scss';
 import PrivateRoute from './privateroute';
+import UserProviderWithNavigate from './UserProviderWithNavigate'; // Import the new wrapper component
 
 const App = () => {
   const [showChatModal, setShowChatModal] = useState(false);
@@ -31,8 +32,8 @@ const App = () => {
   };
 
   return (
-    <UserProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <UserProviderWithNavigate>
         <Navbar />
         <div>
           <Routes>
@@ -66,8 +67,8 @@ const App = () => {
         </div>
         <Footer onChatClick={handleChatClick} />
         {showChatModal && <ChatModal onClose={() => setShowChatModal(false)} />}
-      </BrowserRouter>
-    </UserProvider>
+      </UserProviderWithNavigate>
+    </BrowserRouter>
   );
 };
 

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import React, { useState, useEffect, useContext } from 'react'; // Import useContext here
+import { Typography, TextField, Button } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
+import { UserContext } from './../UserContext'; // Update the path as necessary
 
 const BusinessUserProfile = () => {
   const [businessUserData, setBusinessUserData] = useState({
@@ -12,6 +13,9 @@ const BusinessUserProfile = () => {
       websiteURL: '',
       contactInfo: '',
     });
+
+    // const navigate = useNavigate();
+    const { handleLogout } = useContext(UserContext); // Correct usage of useContext
 
     const fetchBusinessUserData = async () => {
       const token = localStorage.getItem('jwtToken');
@@ -76,10 +80,10 @@ const BusinessUserProfile = () => {
             throw new Error('Delete failed: ' + await response.text());
         }
         alert('Profile deleted successfully');
-        
-        // Redirecting to the homepage
-        history.push('/'); // Replace '/' with your homepage route
-    } catch (error) {
+        handleLogout();
+        // navigate('/'); // Redirect to the homepage after successful login
+        // localStorage.removeItem('jwtToken');
+      } catch (error) {
         console.error('Error deleting profile:', error);
     }
 };
