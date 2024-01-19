@@ -25,6 +25,10 @@ const BusinessUserProfile = () => {
     const [selectedResearch, setSelectedResearch] = useState('');
     const [panelMembers, setPanelMembers] = useState([]);
     const [selectedPanelMember, setSelectedPanelMember] = useState('');
+    const [isProfileExpanded, setIsProfileExpanded] = useState(false); // State for profile expansion
+    const [chats, setChats] = useState([]);
+    const [activePanelMembers, setActivePanelMembers] = useState([]); // Bevat panelmembers met actieve chats
+    const [panelMembersInfo, setPanelMembersInfo] = useState([]);
 
     const fetchBusinessUserData = async () => {
       const token = localStorage.getItem('jwtToken');
@@ -39,10 +43,42 @@ const BusinessUserProfile = () => {
         }
         const data = await response.json();
         setBusinessUserData(data);
+    
+        // Call fetchResearches after setting the business user data
+        fetchResearches(data.id);
       } catch (error) {
         console.error('Error fetching business user data:', error);
       }
-    };    
+    };
+
+    const fetchChatsForResearch = async (researchId) => {
+      const token = localStorage.getItem('jwtToken');
+      try {
+          const response = await fetch(`${API_BASE_URL}/Chat/getChatsByResearch?researchId=${researchId}`, {
+              headers: { 'Authorization': `Bearer ${token}` },
+          });
+  
+          if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+    
+          const chatData = await response.json();
+          console.log('Chat Data:', chatData); // Log the chat data
+  
+          const validPanelMemberIds = new Set(chatData.map(chat => chat.panelMemberId).filter(id => id && typeof id === 'string'));
+  
+          console.log('Valid Panel Member IDs:', validPanelMemberIds); // Log the filtered IDs
+  
+          const panelMembersInfoData = await Promise.all([...validPanelMemberIds].map(id => 
+              fetch(`${API_BASE_URL}/PanelMember/${id}`, {
+                  headers: { 'Authorization': `Bearer ${token}` },
+              }).then(res => res.ok ? res.json() : null)
+          ));
+  
+          console.log('Panel Members Info:', panelMembersInfoData); // Log the panel member info
+          setPanelMembersInfo(panelMembersInfoData.filter(info => info));
+      } catch (error) {
+          console.error('Error fetching chats:', error);
+      }
+  };   
 
     const handleUpdate = async () => {
       const token = localStorage.getItem('jwtToken');
@@ -116,28 +152,27 @@ const handleCloseChat = () => {
   setMessages([]);
 };
 
-    // Method to fetch researches
-    const fetchResearches = async () => {
-      const token = localStorage.getItem('jwtToken'); // Adjust based on how you store tokens
-      try {
-          const response = await fetch(`${API_BASE_URL}/api/researches`, {
-              method: 'GET',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-              },
-          });
-  
-          if (!response.ok) {
-              throw new Error(`Error ${response.status}: ${await response.text()}`);
-          }
-  
-          const data = await response.json();
-          setResearches(data); // Assuming 'data' is the array of researches
-      } catch (error) {
-          console.error('Error fetching researches:', error);
-      }
-  };
+const fetchResearches = async (conductorId) => {
+  const token = localStorage.getItem('jwtToken');
+  try {
+    const response = await fetch(`${API_BASE_URL}/Research/ByConductor?conductorId=${conductorId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${await response.text()}`);
+    }
+
+    const data = await response.json();
+    setResearches(data);
+  } catch (error) {
+    console.error('Error fetching researches:', error);
+  }
+};
   
   const fetchPanelMembers = async (researchId) => {
     const token = localStorage.getItem('jwtToken'); // Adjust based on your token storage
@@ -163,15 +198,20 @@ const handleCloseChat = () => {
 
   // Handle change for research select
   const handleResearchChange = (event) => {
-      const researchId = event.target.value;
-      setSelectedResearch(researchId);
-      fetchPanelMembers(researchId);
+    const researchId = event.target.value;
+    setSelectedResearch(researchId);
+    fetchChatsForResearch(researchId);
   };
 
-  // Handle change for panel member select
   const handlePanelMemberChange = (event) => {
-      setSelectedPanelMember(event.target.value);
-  };
+    const panelMemberId = event.target.value;
+    setSelectedPanelMember(panelMemberId);
+
+    // Ensure that both panelMemberId and selectedResearch are valid before fetching chats
+    if (panelMemberId && selectedResearch) {
+        fetchChatsForResearch(selectedResearch);
+    }
+};
 
   const handleOpenChatButtonClick = () => {
     if (selectedPanelMember) {
@@ -181,8 +221,13 @@ const handleCloseChat = () => {
     }
 };
 
+
+  const toggleProfile = () => {
+    setIsProfileExpanded(!isProfileExpanded); // Toggle profile expansion
+  };
+
   useEffect(() => {
-    fetchResearches();
+    fetchBusinessUserData();
   }, []);
 
   const handleChange = (event) => {
@@ -267,30 +312,39 @@ const handleCloseChat = () => {
           <div>
             {/* UI for Chat */}
             <FormControl fullWidth>
-              <InputLabel>Research</InputLabel>
-              <Select
-                  value={selectedResearch}
-                  onChange={handleResearchChange}
-              >
-                  {researches.map((research) => (
-                      <MenuItem key={research.id} value={research.id}>{research.title}</MenuItem>
-                  ))}
-              </Select>
-          </FormControl>
+      <InputLabel>Onderzoek</InputLabel>
+      <Select
+          value={selectedResearch}
+          onChange={handleResearchChange}
+      >
+          {researches.map((research) => (
+              <MenuItem key={research.id} value={research.id}>{research.title}</MenuItem>
+          ))}
+      </Select>
+    </FormControl>
 
-          <FormControl fullWidth>
-              <InputLabel>Panel Member</InputLabel>
-              <Select
-                  value={selectedPanelMember}
-                  onChange={handlePanelMemberChange}
-              >
-                  {panelMembers.map((member) => (
-                      <MenuItem key={member.id} value={member.id}>{member.name}</MenuItem>
-                  ))}
-              </Select>
-          </FormControl>
-
-          <Button variant="outlined" onClick={handleOpenChatButtonClick}>Open Chat</Button>
+    <FormControl fullWidth>
+    <InputLabel>Panel Member</InputLabel>
+    <Select
+        value={selectedPanelMember}
+        onChange={handlePanelMemberChange}
+    >
+        {panelMembersInfo.map((member) => (
+            <MenuItem key={member.id} value={member.id}>{member.firstName} {member.lastName}</MenuItem>
+        ))}
+    </Select>
+</FormControl>
+              <div>
+            {showChat && chats
+              .filter(chat => chat.panelMemberId === selectedPanelMember)
+              .flatMap(chat => chat.messages)
+              .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+              .map((message, index) => (
+                <div key={index}>
+                  <p>{message.content} - {new Date(message.timestamp).toLocaleString()}</p>
+                </div>
+              ))}
+          </div>
         </div>
       </form>
     </div>

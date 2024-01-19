@@ -116,4 +116,17 @@ public class ResearchController : ControllerBase
 
        return Ok();
    }
+
+    [HttpGet("ByConductor")]
+    public async Task<ActionResult<IEnumerable<Research>>> GetResearchesByConductor([FromQuery] Guid? conductorId)
+    {
+        var query = _context.Researches.AsQueryable();
+
+        if (conductorId.HasValue)
+        {
+            query = query.Where(r => r.ConductorId == conductorId);
+        }
+
+        return await query.ToListAsync();
+    }
 }
