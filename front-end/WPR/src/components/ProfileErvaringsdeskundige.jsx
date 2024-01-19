@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'; // Add useContext to the import from 'react'
-import { Typography, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
+import React, { useState, useEffect, useContext } from 'react';
+import { Typography, TextField, Button, Checkbox, FormControlLabel, 
+         Card, CardContent, CardActions, Grid, 
+         Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
-import ChatComponent from './ChatComponent'; 
-import { UserContext } from './../UserContext'; 
+import ChatComponent from './ChatComponent';
+import { UserContext } from './../UserContext';
 
 const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
@@ -30,6 +32,9 @@ const ProfileErvaringsdeskundige = () => {
   const [selectedResearchId, setSelectedResearchId] = useState(null); // State voor het geselecteerde research ID voor de chat
   const [selectedBusinessUserId, setSelectedBusinessUserId] = useState(null); // State voor het geselecteerde research ID voor de chat
   const { handleLogout } = useContext(UserContext); // Now useContext is defined and can be used here
+  const [isProfileExpanded, setIsProfileExpanded] = useState(false);
+  const [selectedResearch, setSelectedResearch] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenChat = (researchId, businessUserId) => {
     console.log('Opening chat for:', researchId, businessUserId); // Debug log
@@ -42,6 +47,19 @@ const ProfileErvaringsdeskundige = () => {
     setShowChat(false);
     setSelectedResearchId(null);
     setSelectedBusinessUserId(null);
+  };
+
+  const toggleProfile = () => {
+    setIsProfileExpanded(!isProfileExpanded);
+  };  
+
+  const handleOpenDialog = (research) => {
+    setSelectedResearch(research);
+    setOpenDialog(true);
+  };
+  
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   useEffect(() => {
@@ -188,157 +206,192 @@ const ProfileErvaringsdeskundige = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h6">Mijn Profiel</Typography>
-      <form onSubmit={handleUpdate}>
-        <TextField
-          label="Voornaam"
-          variant="outlined"
-          name="voornaam"
-          value={profileData.voornaam || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Achternaam"
-          variant="outlined"
-          name="achternaam"
-          value={profileData.achternaam || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Postcode"
-          variant="outlined"
-          name="postcode"
-          value={profileData.postcode || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Email"
-          variant="outlined"
-          name="email"
-          value={profileData.email || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Telefoonnummer"
-          variant="outlined"
-          name="telefoonnummer"
-          value={profileData.telefoonnummer || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Type beperking"
-          variant="outlined"
-          name="typeBeperking"
-          value={profileData.typeBeperking || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Hulpmiddelen"
-          variant="outlined"
-          name="hulpmiddelen"
-          value={profileData.hulpmiddelen || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Aandoening"
-          variant="outlined"
-          name="aandoening"
-          value={profileData.aandoening || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Onderzoeksvoorkeuren"
-          variant="outlined"
-          name="onderzoeksvoorkeuren"
-          value={profileData.onderzoeksvoorkeuren || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Benaderingsvoorkeur"
-          variant="outlined"
-          name="benaderingsvoorkeur"
-          value={profileData.benaderingsvoorkeur || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={profileData.toestemmingCommercieel || false} 
-              onChange={handleChange}
-              name="toestemmingCommercieel"
-            />
-          }
-          label="Toestemming voor commercieel benaderen"
-        />
-        <TextField
-          label="Beschikbaarheid"
-          variant="outlined"
-          name="beschikbaarheid"
-          value={profileData.beschikbaarheid || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Informatie van ouder/voogd"
-          variant="outlined"
-          name="ouderInfo"
-          value={profileData.ouderInfo || ''} 
-          onChange={handleChange}
-          margin="normal"
-          fullWidth
-          multiline
-          rows={4}
-        />
-        <Button variant="contained" color="primary" type="submit">
-          Bijwerken
+    <div style={{ textAlign: 'left' }}>
+    <Typography variant="h6" onClick={toggleProfile} style={{ cursor: 'pointer'}}>
+        Mijn Profiel {isProfileExpanded ? '▲' : '▼'}
+      </Typography>
+  
+      {isProfileExpanded && (
+        <form onSubmit={handleUpdate}>
+  <TextField
+            label="Voornaam"
+            variant="outlined"
+            name="voornaam"
+            value={profileData.voornaam || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Achternaam"
+            variant="outlined"
+            name="achternaam"
+            value={profileData.achternaam || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Postcode"
+            variant="outlined"
+            name="postcode"
+            value={profileData.postcode || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            name="email"
+            value={profileData.email || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Telefoonnummer"
+            variant="outlined"
+            name="telefoonnummer"
+            value={profileData.telefoonnummer || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Type beperking"
+            variant="outlined"
+            name="typeBeperking"
+            value={profileData.typeBeperking || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Hulpmiddelen"
+            variant="outlined"
+            name="hulpmiddelen"
+            value={profileData.hulpmiddelen || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Aandoening"
+            variant="outlined"
+            name="aandoening"
+            value={profileData.aandoening || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Onderzoeksvoorkeuren"
+            variant="outlined"
+            name="onderzoeksvoorkeuren"
+            value={profileData.onderzoeksvoorkeuren || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Benaderingsvoorkeur"
+            variant="outlined"
+            name="benaderingsvoorkeur"
+            value={profileData.benaderingsvoorkeur || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={profileData.toestemmingCommercieel || false} 
+                onChange={handleChange}
+                name="toestemmingCommercieel"
+              />
+            }
+            label="Toestemming voor commercieel benaderen"
+          />
+          <TextField
+            label="Beschikbaarheid"
+            variant="outlined"
+            name="beschikbaarheid"
+            value={profileData.beschikbaarheid || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            label="Informatie van ouder/voogd"
+            variant="outlined"
+            name="ouderInfo"
+            value={profileData.ouderInfo || ''} 
+            onChange={handleChange}
+            margin="normal"
+            fullWidth
+            multiline
+            rows={4}
+          />
+          <Button variant="contained" color="primary" type="submit">
+            Bijwerken
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleDelete}>
+            Verwijderen
+          </Button>
+        </form>
+      )}
+  
+  <Typography variant="h6" style={{ marginTop: '20px' }}>
+        Beschikbare Onderzoeken
+      </Typography>
+      <Grid container spacing={4} style={{ padding: '20px' }}>
+        {researches.map(research => (
+          <Grid item xs={12} sm={6} md={4} key={research.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">{research.title}</Typography>
+                <Typography variant="body2">{research.description}</Typography>
+                <Typography variant="body2">Beloning: {research.reward}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary" onClick={() => handleOpenDialog(research)}>
+                  Meer Lezen
+                </Button>
+                {/* Chat initiation button */}
+                <Button size="small" color="secondary" onClick={() => handleOpenChat(research.id, research.conductorId)}>
+                  Chat
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Dialog for displaying selected research details */}
+    {/* Dialog for displaying selected research details */}
+    <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <DialogTitle id="dialog-title">{selectedResearch.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">
+          {selectedResearch.description}
+          <p>Beloning: {selectedResearch.reward}</p>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseDialog} color="primary">
+          Sluiten
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleDelete}>
-          Verwijderen
-        </Button>
-      </form>
-      <div>
-        <Typography variant="h6">Beschikbare Onderzoeken</Typography>
-      {researches.map(research => (
-        <div key={research.id}>
-          <Typography variant="body1">{research.title}</Typography>
-          {likedResearches.has(research.id) ? (
-            <Button onClick={() => handleUnlikeResearch(research.id)}>Unlike</Button>
-          ) : (
-            <Button onClick={() => handleLikeResearch(research.id)}>Like</Button>
-          )}
-          <Button onClick={() => handleOpenChat(research.id, research.conductorId)}>Chat</Button>
-        </div>
-      ))}
-      </div>
-    {showChat && (
-      <ChatComponent
-        researchId={selectedResearchId}
-        businessUserId={selectedBusinessUserId}
-        handleClose={handleCloseChat}
-      />
-    )}
+      </DialogActions>
+    </Dialog>
+      {/* Existing chat component */}
+      {showChat && (
+        <ChatComponent
+          researchId={selectedResearchId}
+          businessUserId={selectedBusinessUserId}
+          handleClose={handleCloseChat}
+        />
+      )}
     </div>
   );  
 };
