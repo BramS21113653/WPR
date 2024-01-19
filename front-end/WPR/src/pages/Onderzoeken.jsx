@@ -34,6 +34,7 @@ const Onderzoeken = () => {
   }
 
   return (
+    <div div className="main-content">
     <Grid container spacing={4} style={{ padding: '20px' }}>
       {onderzoeken.map((onderzoek) => (
         <Grid item xs={12} sm={6} md={4} key={onderzoek.id}>
@@ -59,6 +60,7 @@ const Onderzoeken = () => {
         </Grid>
       ))}
     </Grid>
+    </div>
   );
 };
 
