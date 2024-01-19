@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import './Registreren.css';
 import { API_BASE_URL } from '../../../apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 const Registreren = () => {
-  // State to hold form data
   const [formData, setFormData] = useState({
     voornaam: '',
     achternaam: '',
     email: '',
     wachtwoord: '',
     herhaalWachtwoord: '',
+    userType: '',
   });
 
-  // Update form data on input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // LinkedIn AutoFill functionality
+  const navigate = useNavigate();
+
   const handleLinkedInFill = () => {
     // Load the LinkedIn script and initialize the API
     const script = document.createElement("script");
@@ -27,23 +28,21 @@ const Registreren = () => {
                          onLoad: onLinkedInLoad`;
     document.body.appendChild(script);
 
-    // Define the callback function for when LinkedIn is loaded
     window.onLinkedInLoad = () => {
       window.IN.User.authorize(() => {
         window.IN.API.Profile("me").fields(["firstName", "lastName", "emailAddress"]).result(profiles => {
           const profile = profiles.values[0];
-          setFormData({
-            ...formData,
+          setFormData(prevData => ({
+            ...prevData,
             voornaam: profile.firstName || '',
             achternaam: profile.lastName || '',
             email: profile.emailAddress || '',
-          });
+          }));
         });
       });
     };
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,15 +63,16 @@ const Registreren = () => {
           Password: formData.wachtwoord,
           FirstName: formData.voornaam,
           LastName: formData.achternaam,
+          UserType: formData.userType,
         }),
       });
 
       if (!response.ok) {
         throw new Error('Er is iets misgegaan bij de registratie.');
       }
-
+      
       alert('Registratie succesvol!');
-      // Further actions on successful registration like redirecting to a login page
+      navigate('/inloggen'); // Redirect to login page
     } catch (error) {
       alert(error.message);
     }
@@ -86,6 +86,7 @@ const Registreren = () => {
           <button type="button" onClick={handleLinkedInFill}>Vul in met LinkedIn</button>
           <p>coming soon...</p>
         </div>
+
         <div className="form-body">
           <div className="voornaam">
             <label className="form__label" htmlFor="voornaam">Voornaam </label>
@@ -106,8 +107,17 @@ const Registreren = () => {
           <div className="herhaal-wachtwoord">
             <label className="form__label" htmlFor="herhaalWachtwoord">Herhaal wachtwoord </label>
             <input className="form__input" type="password" id="herhaalWachtwoord" placeholder="Herhaal Wachtwoord" onChange={handleChange} value={formData.herhaalWachtwoord} />
+          <div className="user-type">
+            <label htmlFor="userType">Gebruikerstype:</label>
+            <select id="userType" value={formData.userType} onChange={handleChange} className="form__input">
+              <option value="">Kies een type</option>
+              <option value="PanelMember">PanelMember</option>
+              <option value="BusinessUser">BusinessUser</option>
+              <option value="Administrator">Administrator</option>
+            </select>
           </div>
         </div>
+      </div>
         <div className="footer">
           <button type="submit" className="btn">Registreer</button>
         </div>

@@ -40,26 +40,50 @@ public class UserService : IUserService
     //     return result;
     // }
 
-    public async Task<IdentityResult> Register(RegisterRequest model) {
-        if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName))
-        {
-            return IdentityResult.Failed(new IdentityError { Description = "FirstName and LastName are required." });
-        }
-
-        var user = new PanelMember // Changed from ApplicationUser to PanelMember
-        {
-            UserName = model.Username,
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            // Initialize other properties of PanelMember if necessary
-        };
-
-        var result = await _userManager.CreateAsync(user, model.Password);
-        // Handle the result...
-        return result;
+public async Task<IdentityResult> Register(RegisterRequest model) {
+    if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName)) {
+        return IdentityResult.Failed(new IdentityError { Description = "FirstName and LastName are required." });
     }
 
+    // Create an ApplicationUser object based on the provided UserType
+    ApplicationUser user;
+    switch (model.UserType) {
+        case "PanelMember":
+            user = new PanelMember {
+                UserName = model.Username,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                // Initialize other properties of PanelMember if necessary
+            };
+            break;
+        case "BusinessUser":
+            user = new BusinessUser {
+                UserName = model.Username,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                CompanyName = model.CompanyName, // Assuming you have a CompanyName field in your model
+                // Initialize other properties of BusinessUser if necessary
+            };
+            break;
+        case "Administrator":
+            user = new Administrator {
+                UserName = model.Username,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                // Initialize other properties of Administrator if necessary
+            };
+            break;
+        default:
+            return IdentityResult.Failed(new IdentityError { Description = "Invalid user type." });
+    }
+
+    var result = await _userManager.CreateAsync(user, model.Password);
+    // Handle the result...
+    return result;
+}
 
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
