@@ -54,31 +54,36 @@ const BusinessUserProfile = () => {
     const fetchChatsForResearch = async (researchId) => {
       const token = localStorage.getItem('jwtToken');
       try {
-          const response = await fetch(`${API_BASE_URL}/Chat/getChatsByResearch?researchId=${researchId}`, {
-              headers: { 'Authorization': `Bearer ${token}` },
-          });
-  
-          if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
-    
-          const chatData = await response.json();
-          console.log('Chat Data:', chatData); // Log the chat data
-  
-          const validPanelMemberIds = new Set(chatData.map(chat => chat.panelMemberId).filter(id => id && typeof id === 'string'));
-  
-          console.log('Valid Panel Member IDs:', validPanelMemberIds); // Log the filtered IDs
-  
-          const panelMembersInfoData = await Promise.all([...validPanelMemberIds].map(id => 
-              fetch(`${API_BASE_URL}/PanelMember/${id}`, {
-                  headers: { 'Authorization': `Bearer ${token}` },
-              }).then(res => res.ok ? res.json() : null)
-          ));
-  
-          console.log('Panel Members Info:', panelMembersInfoData); // Log the panel member info
-          setPanelMembersInfo(panelMembersInfoData.filter(info => info));
+        const response = await fetch(`${API_BASE_URL}/Chat/getChatsByResearch?researchId=${researchId}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+     
+        if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+     
+        const chatData = await response.json();
+        console.log('Chat Data:', chatData); // Log the chat data
+     
+        const validSenderIds = new Set(
+          chatData.flatMap(chat => 
+            chat.messages.map(message => message.senderId)
+          ).filter(id => id && typeof id === 'string')
+        );
+     
+        console.log('Valid Sender IDs:', validSenderIds); // Log the filtered IDs
+     
+        const panelMembersInfoData = await Promise.all([...validSenderIds].map(id => 
+          fetch(`${API_BASE_URL}/PanelMember/${id}`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+          }).then(res => res.ok ? res.json() : null)
+        ));
+     
+        console.log('Panel Members Info:', panelMembersInfoData); // Log the panel member info
+        setPanelMembersInfo(panelMembersInfoData.filter(info => info));
       } catch (error) {
-          console.error('Error fetching chats:', error);
+        console.error('Error fetching chats:', error);
       }
-  };   
+     };
+     
 
     const handleUpdate = async () => {
       const token = localStorage.getItem('jwtToken');
