@@ -5,6 +5,7 @@ import { Typography, TextField, Button, Checkbox, FormControlLabel,
 import { API_BASE_URL } from './../../apiConfig';
 import ChatComponent from './ChatComponent';
 import { UserContext } from './../UserContext';
+import Collapse from '@mui/material/Collapse';
 
 const ProfileErvaringsdeskundige = () => {
   console.log('ProfielComponent is rendering'); // Debug log
@@ -206,10 +207,64 @@ const ProfileErvaringsdeskundige = () => {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
-    <Typography variant="h6" onClick={toggleProfile} style={{ cursor: 'pointer'}}>
-        Mijn Profiel {isProfileExpanded ? '▲' : '▼'}
+    <div>
+  <Typography variant="h6" style={{ marginTop: '20px' }}>
+        Beschikbare Onderzoeken
       </Typography>
+      <Grid container spacing={4} style={{ padding: '20px' }}>
+        {researches.map(research => (
+          <Grid item xs={12} sm={6} md={4} key={research.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">{research.title}</Typography>
+                <Typography variant="body2">{research.description}</Typography>
+                <Typography variant="body2">Beloning: {research.reward}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary" onClick={() => handleOpenDialog(research)}>
+                  Meer Lezen
+                </Button>
+                {/* Chat initiation button */}
+                <Button size="small" color="secondary" onClick={() => handleOpenChat(research.id, research.conductorId)}>
+                  Chat
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* Dialog for displaying selected research details */}
+    {/* Dialog for displaying selected research details */}
+    <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <DialogTitle id="dialog-title">{selectedResearch.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">
+          {selectedResearch.description}
+          <p>Beloning: {selectedResearch.reward}</p>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseDialog} color="primary">
+          Sluiten
+        </Button>
+      </DialogActions>
+    </Dialog>
+      {/* Existing chat component */}
+      {showChat && (
+        <ChatComponent
+          researchId={selectedResearchId}
+          businessUserId={selectedBusinessUserId}
+          handleClose={handleCloseChat}
+        />
+      )}
+    <div>
+      <br></br>
+    <Button variant="contained" color="primary" onClick={toggleProfile}>
+      {isProfileExpanded ? 'Verberg Profiel' : 'Toon en bewerk eventueel je profiel'}
+    </Button>
+    <Collapse in={isProfileExpanded}>
+       <Typography variant="h6">Panelmember Profiel</Typography>
   
       {isProfileExpanded && (
         <form onSubmit={handleUpdate}>
@@ -340,58 +395,9 @@ const ProfileErvaringsdeskundige = () => {
             Verwijderen
           </Button>
         </form>
-      )}
-  
-  <Typography variant="h6" style={{ marginTop: '20px' }}>
-        Beschikbare Onderzoeken
-      </Typography>
-      <Grid container spacing={4} style={{ padding: '20px' }}>
-        {researches.map(research => (
-          <Grid item xs={12} sm={6} md={4} key={research.id}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5">{research.title}</Typography>
-                <Typography variant="body2">{research.description}</Typography>
-                <Typography variant="body2">Beloning: {research.reward}</Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" color="primary" onClick={() => handleOpenDialog(research)}>
-                  Meer Lezen
-                </Button>
-                {/* Chat initiation button */}
-                <Button size="small" color="secondary" onClick={() => handleOpenChat(research.id, research.conductorId)}>
-                  Chat
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Dialog for displaying selected research details */}
-    {/* Dialog for displaying selected research details */}
-    <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" aria-describedby="dialog-description">
-      <DialogTitle id="dialog-title">{selectedResearch.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="dialog-description">
-          {selectedResearch.description}
-          <p>Beloning: {selectedResearch.reward}</p>
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseDialog} color="primary">
-          Sluiten
-        </Button>
-      </DialogActions>
-    </Dialog>
-      {/* Existing chat component */}
-      {showChat && (
-        <ChatComponent
-          researchId={selectedResearchId}
-          businessUserId={selectedBusinessUserId}
-          handleClose={handleCloseChat}
-        />
-      )}
+      )}       
+      </Collapse>
+      </div>
     </div>
   );  
 };

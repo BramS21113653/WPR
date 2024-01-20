@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
 import { UserContext } from './../UserContext';
+import Collapse from '@mui/material/Collapse';
 
 const BusinessUserProfile = () => {
   const [businessUserData, setBusinessUserData] = useState({
@@ -248,6 +249,51 @@ const fetchResearches = async (conductorId) => {
 
   return (
     <div>
+        <Typography variant="h6">Chat with panelmembers</Typography>
+          <div>
+            {/* UI for Chat */}
+            <FormControl fullWidth>
+      <InputLabel>Onderzoek</InputLabel>
+      <Select
+          value={selectedResearch}
+          onChange={handleResearchChange}
+      >
+          {researches.map((research) => (
+              <MenuItem key={research.id} value={research.id}>{research.title}</MenuItem>
+          ))}
+      </Select>
+    </FormControl>
+
+    <FormControl fullWidth>
+    <InputLabel>Panel Member</InputLabel>
+    <Select
+        value={selectedPanelMember}
+        onChange={handlePanelMemberChange}
+    >
+        {panelMembersInfo.map((member) => (
+            <MenuItem key={member.id} value={member.id}>{member.firstName} {member.lastName}</MenuItem>
+        ))}
+    </Select>
+</FormControl>
+              <div>
+            {showChat && chats
+              .filter(chat => chat.panelMemberId === selectedPanelMember)
+              .flatMap(chat => chat.messages)
+              .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+              .map((message, index) => (
+                <div key={index}>
+                  <p>{message.content} - {new Date(message.timestamp).toLocaleString()}</p>
+                </div>
+              ))}
+          </div>
+        </div>
+        <div>
+          <br></br>
+          <br></br>
+   <Button variant="contained" color="primary" onClick={toggleProfile}>
+     {isProfileExpanded ? 'Verberg Profiel' : 'Toon en bewerk eventueel je profiel'}
+   </Button>
+   <Collapse in={isProfileExpanded}>
       <Typography variant="h6">Bedrijfsprofiel</Typography>
       <form>
         <TextField
@@ -310,48 +356,9 @@ const fetchResearches = async (conductorId) => {
         <Button variant="contained" color="secondary" onClick={handleDelete}>
           Verwijderen
         </Button>
-        <br></br>
-        <br></br>
-        <Typography variant="h6">Chat with panelmembers</Typography>
-        <Typography variant="h6">not working yet...</Typography>
-          <div>
-            {/* UI for Chat */}
-            <FormControl fullWidth>
-      <InputLabel>Onderzoek</InputLabel>
-      <Select
-          value={selectedResearch}
-          onChange={handleResearchChange}
-      >
-          {researches.map((research) => (
-              <MenuItem key={research.id} value={research.id}>{research.title}</MenuItem>
-          ))}
-      </Select>
-    </FormControl>
-
-    <FormControl fullWidth>
-    <InputLabel>Panel Member</InputLabel>
-    <Select
-        value={selectedPanelMember}
-        onChange={handlePanelMemberChange}
-    >
-        {panelMembersInfo.map((member) => (
-            <MenuItem key={member.id} value={member.id}>{member.firstName} {member.lastName}</MenuItem>
-        ))}
-    </Select>
-</FormControl>
-              <div>
-            {showChat && chats
-              .filter(chat => chat.panelMemberId === selectedPanelMember)
-              .flatMap(chat => chat.messages)
-              .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-              .map((message, index) => (
-                <div key={index}>
-                  <p>{message.content} - {new Date(message.timestamp).toLocaleString()}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-      </form>
+        </form>
+      </Collapse>
+      </div>
     </div>
   );
 };
