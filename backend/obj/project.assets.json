@@ -11632,19 +11632,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/remcolangemaire/.nuget/packages/": {}
+    "/Users/bramsteenkamp/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/remcolangemaire/Documents/GitHub/WPR/backend/backend.csproj",
+      "projectUniqueName": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "/Users/remcolangemaire/Documents/GitHub/WPR/backend/backend.csproj",
-      "packagesPath": "/Users/remcolangemaire/.nuget/packages/",
-      "outputPath": "/Users/remcolangemaire/Documents/GitHub/WPR/backend/obj/",
+      "projectPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/backend.csproj",
+      "packagesPath": "/Users/bramsteenkamp/.nuget/packages/",
+      "outputPath": "/Users/bramsteenkamp/Desktop/WPR/wpr/WPR/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/remcolangemaire/.nuget/NuGet/NuGet.Config"
+        "/Users/bramsteenkamp/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -11744,7 +11744,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.403/RuntimeIdentifierGraph.json"
       }
     }
   }
