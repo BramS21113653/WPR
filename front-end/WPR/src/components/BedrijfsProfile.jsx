@@ -17,6 +17,7 @@ const BusinessUserProfile = () => {
   const [researches, setResearches] = useState([]);
   const [researchMessages, setResearchMessages] = useState({});
   const [isProfileExpanded, setIsProfileExpanded] = useState(false);
+  const [panelMemberInfo, setPanelMemberInfo] = useState({}); 
 
   const { handleLogout } = useContext(UserContext);
 
@@ -55,6 +56,25 @@ const BusinessUserProfile = () => {
         console.error('Error fetching messages:', error);
       }
     }; 
+
+  const fetchPanelMemberInfo = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/PanelMember/all`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}` },
+      });
+      if (!response.ok) {
+        throw new Error('Kan informatie van panelleden niet ophalen');
+      }
+      const panelMembers = await response.json();
+      const panelMemberMap = {};
+      panelMembers.forEach(member => {
+        panelMemberMap[member.id] = member.firstName + " " + member.lastName;
+      });
+      setPanelMemberInfo(panelMemberMap);
+    } catch (error) {
+      console.error('Error fetching panel member info:', error);
+    }
+  };
 
     const handleUpdate = async () => {
       const token = localStorage.getItem('jwtToken');
@@ -137,6 +157,7 @@ const fetchResearches = async (conductorId) => {
 
   useEffect(() => {
     fetchBusinessUserData();
+    fetchPanelMemberInfo();
   }, []);
 
   useEffect(() => {
@@ -163,26 +184,28 @@ const fetchResearches = async (conductorId) => {
     <div>
       <Typography variant="h6">Berichten/feedback van ervaringsdeskundigen per onderzoek</Typography>
       <div>
-        <Grid container spacing={2}>
-          {researches.map((research) => (
-            <Grid item xs={12} sm={6} md={4} key={research.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{research.title}</Typography>
-                  {researchMessages[research.id] ? (
-                    <div>
-                      {researchMessages[research.id].map((msg, index) => (
-                        <p key={index}>{msg.content}</p>
-                      ))}
-                    </div>
-                  ) : (
-                    <Typography>Berichten worden geladen...</Typography>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+      <Grid container spacing={2}>
+        {researches.map((research) => (
+          <Grid item xs={12} sm={6} md={4} key={research.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">{research.title}</Typography>
+                {researchMessages[research.id] ? (
+                  <div>
+                    {researchMessages[research.id].map((msg, index) => (
+                      <p key={index}>
+                        {panelMemberInfo[msg.senderId] && <strong>{panelMemberInfo[msg.senderId]}:</strong>} {msg.content}
+                      </p>
+                    ))}
+                  </div>
+                ) : (
+                  <Typography>Berichten worden geladen...</Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
           <br></br>
           <br></br>
    <Button variant="contained" color="primary" onClick={toggleProfile}>
