@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, Card, CardContent } from '@mui/material';
 import { API_BASE_URL } from './../../apiConfig';
 import { UserContext } from './../UserContext';
 import Collapse from '@mui/material/Collapse';
@@ -30,6 +30,8 @@ const BusinessUserProfile = () => {
     const [chats, setChats] = useState([]);
     const [activePanelMembers, setActivePanelMembers] = useState([]); // Bevat panelmembers met actieve chats
     const [panelMembersInfo, setPanelMembersInfo] = useState([]);
+    const [selectedPanelMemberForResearch, setSelectedPanelMemberForResearch] = useState({});
+    const [panelMembersInfoByResearch, setPanelMembersInfoByResearch] = useState({});
 
     const fetchBusinessUserData = async () => {
       const token = localStorage.getItem('jwtToken');
@@ -52,38 +54,38 @@ const BusinessUserProfile = () => {
       }
     };
 
-    const fetchChatsForResearch = async (researchId) => {
+    const fetchPanelMembersForAllResearches = async () => {
       const token = localStorage.getItem('jwtToken');
       try {
-        const response = await fetch(`${API_BASE_URL}/Chat/getChatsByResearch?researchId=${researchId}`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-        });
-     
-        if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
-     
-        const chatData = await response.json();
-        console.log('Chat Data:', chatData); // Log the chat data
-     
-        const validSenderIds = new Set(
-          chatData.flatMap(chat => 
-            chat.messages.map(message => message.senderId)
-          ).filter(id => id && typeof id === 'string')
-        );
-     
-        console.log('Valid Sender IDs:', validSenderIds); // Log the filtered IDs
-     
-        const panelMembersInfoData = await Promise.all([...validSenderIds].map(id => 
-          fetch(`${API_BASE_URL}/PanelMember/${id}`, {
+        await Promise.all(researches.map(async (research) => {
+          const response = await fetch(`${API_BASE_URL}/Chat/getChatsByResearch?researchId=${research.id}`, {
             headers: { 'Authorization': `Bearer ${token}` },
-          }).then(res => res.ok ? res.json() : null)
-        ));
-     
-        console.log('Panel Members Info:', panelMembersInfoData); // Log the panel member info
-        setPanelMembersInfo(panelMembersInfoData.filter(info => info));
+          });
+  
+          if (!response.ok) throw new Error(`Error: ${await response.text()}`);
+          const chatData = await response.json();
+          
+          const panelMemberIds = new Set(
+            chatData.flatMap(chat => 
+              chat.messages.map(message => message.senderId)
+            ).filter(id => id && typeof id === 'string')
+          );
+  
+          const panelMembersInfoData = await Promise.all([...panelMemberIds].map(id => 
+            fetch(`${API_BASE_URL}/PanelMember/${id}`, {
+              headers: { 'Authorization': `Bearer ${token}` },
+            }).then(res => res.ok ? res.json() : null)
+          ));
+  
+          setPanelMembersInfoByResearch(prevState => ({
+            ...prevState,
+            [research.id]: panelMembersInfoData.filter(info => info)
+          }));
+        }));
       } catch (error) {
-        console.error('Error fetching chats:', error);
+        console.error('Error fetching panel members for all researches:', error);
       }
-     };
+    };
      
 
     const handleUpdate = async () => {
@@ -158,6 +160,12 @@ const handleCloseChat = () => {
   setMessages([]);
 };
 
+const openChatWithPanelMember = async (researchId, panelMemberId) => {
+  setActiveChat({ researchId, panelMemberId });
+  setShowChat(true);
+  // U kunt hier ook berichten voor deze chat ophalen indien nodig
+};
+
 const fetchResearches = async (conductorId) => {
   const token = localStorage.getItem('jwtToken');
   try {
@@ -219,6 +227,24 @@ const fetchResearches = async (conductorId) => {
     }
 };
 
+// nieuw
+const handlePanelMemberChangeForResearch = (researchId, panelMemberId) => {
+  setSelectedPanelMemberForResearch(prevState => ({
+    ...prevState,
+    [researchId]: panelMemberId,
+  }));
+};
+
+// nieuw
+const openChatForResearch = (researchId) => {
+  const panelMemberId = selectedPanelMemberForResearch[researchId];
+  if (panelMemberId) {
+    setShowChat(true);
+    setActiveChat({ panelMemberId });
+    // Fetch existing chat messages if necessary
+  }
+};
+
   const handleOpenChatButtonClick = () => {
     if (selectedPanelMember) {
         setShowChat(true);
@@ -235,6 +261,12 @@ const fetchResearches = async (conductorId) => {
   useEffect(() => {
     fetchBusinessUserData();
   }, []);
+  
+  useEffect(() => {
+    if (businessUserData && businessUserData.id) {
+      fetchResearches(businessUserData.id);
+    }
+  }, [businessUserData]);  
 
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
@@ -249,45 +281,45 @@ const fetchResearches = async (conductorId) => {
 
   return (
     <div>
-        <Typography variant="h6">Chat with panelmembers</Typography>
+        <Typography variant="h6">Berichten/feedback van ervaringsdeskundigen per onderzoek</Typography>
           <div>
-            {/* UI for Chat */}
-            <FormControl fullWidth>
-      <InputLabel>Onderzoek</InputLabel>
-      <Select
-          value={selectedResearch}
-          onChange={handleResearchChange}
-      >
-          {researches.map((research) => (
-              <MenuItem key={research.id} value={research.id}>{research.title}</MenuItem>
-          ))}
-      </Select>
-    </FormControl>
-
-    <FormControl fullWidth>
-    <InputLabel>Panel Member</InputLabel>
-    <Select
-        value={selectedPanelMember}
-        onChange={handlePanelMemberChange}
-    >
-        {panelMembersInfo.map((member) => (
-            <MenuItem key={member.id} value={member.id}>{member.firstName} {member.lastName}</MenuItem>
+      {/* Grid Layout for Researches */}
+      <Grid container spacing={2}>
+        {researches.map((research) => (
+          <Grid item xs={12} sm={6} md={4} key={research.id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6">{research.title}</Typography>
+                {panelMembersInfoByResearch[research.id] ? (
+                  <FormControl fullWidth>
+                    <InputLabel>Berichten</InputLabel>
+                    <Select
+                      value={selectedPanelMemberForResearch[research.id] || ''}
+                      onChange={(event) => handlePanelMemberChangeForResearch(research.id, event.target.value)}
+                    >
+                      {panelMembersInfoByResearch[research.id].map((member) => (
+                        <MenuItem key={member.id} value={member.id}>
+                          {member.firstName} {member.lastName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => openChatForResearch(research.id)}
+                      style={{ marginTop: '10px' }}
+                    >
+                      Open Chat
+                    </Button>
+                  </FormControl>
+                ) : (
+                  <Typography>Loading panel members...</Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-    </Select>
-</FormControl>
-              <div>
-            {showChat && chats
-              .filter(chat => chat.panelMemberId === selectedPanelMember)
-              .flatMap(chat => chat.messages)
-              .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-              .map((message, index) => (
-                <div key={index}>
-                  <p>{message.content} - {new Date(message.timestamp).toLocaleString()}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-        <div>
+      </Grid>
           <br></br>
           <br></br>
    <Button variant="contained" color="primary" onClick={toggleProfile}>
