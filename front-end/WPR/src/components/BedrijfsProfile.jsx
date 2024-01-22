@@ -3,7 +3,7 @@ import { Modal, Box, Typography, TextField, Button, Select, MenuItem, FormContro
 import { API_BASE_URL } from './../../apiConfig';
 import { UserContext } from './../UserContext';
 import Collapse from '@mui/material/Collapse';
-import ChatComponent from './ChatComponent';
+import ChatComponent from './ChatComponentBusinessUser';
 
 const BusinessUserProfile = () => {
   const [businessUserData, setBusinessUserData] = useState({
