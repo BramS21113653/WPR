@@ -177,7 +177,7 @@ const ProfileErvaringsdeskundige = () => {
   const handleLikeResearch = async (researchId) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`${API_BASE_URL}/Research/like/${researchId}`, {
+      const response = await fetch(`${API_BASE_URL}/Research/participate/${researchId}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -193,7 +193,7 @@ const ProfileErvaringsdeskundige = () => {
   const handleUnlikeResearch = async (researchId) => {
     const token = localStorage.getItem('jwtToken');
     try {
-      const response = await fetch(`${API_BASE_URL}/Research/unlike/${researchId}`, {
+      const response = await fetch(`${API_BASE_URL}/Research/withdraw/${researchId}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -228,6 +228,12 @@ const ProfileErvaringsdeskundige = () => {
                 <Button size="small" color="secondary" onClick={() => handleOpenChat(research.id, research.conductorId)}>
                   Chat
                 </Button>
+                <Button size="small" color="primary" onClick={() => handleLikeResearch(research.id)}>
+                  Deelnemen
+                </Button>
+              <Button size="small" color="secondary" onClick={() => handleUnlikeResearch(research.id)}>
+                Niet meer deelnemen
+              </Button>
               </CardActions>
             </Card>
           </Grid>

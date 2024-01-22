@@ -56,8 +56,8 @@ public class ResearchController : ControllerBase
    // ... other methods ...
 
    // POST: /Research/like/{researchId}
-   [HttpPost("like/{researchId}")]
-   public async Task<IActionResult> LikeResearch(string researchId)
+    [HttpPost("participate/{researchId}")]
+    public async Task<IActionResult> ParticipateInResearch(string researchId)
    {
        if (!Guid.TryParse(researchId, out Guid guidResearchId))
        {
@@ -93,8 +93,8 @@ public class ResearchController : ControllerBase
    }
 
    // POST: /Research/unlike/{researchId}
-   [HttpPost("unlike/{researchId}")]
-   public async Task<IActionResult> UnlikeResearch(string researchId)
+    [HttpPost("withdraw/{researchId}")]
+    public async Task<IActionResult> WithdrawParticipation(string researchId)
    {
        if (!Guid.TryParse(researchId, out Guid guidResearchId))
        {
