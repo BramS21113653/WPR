@@ -86,4 +86,16 @@ public class ChatController : ControllerBase
 
         return Ok(chats);
     }
+
+        [HttpGet("getMessagesByResearch")]
+        public async Task<IActionResult> GetMessagesByResearch(Guid researchId)
+        {
+            var messages = await _context.Chats
+                                    .Include(c => c.Messages)
+                                    .Where(c => c.ResearchId == researchId)
+                                    .SelectMany(c => c.Messages)
+                                    .ToListAsync();
+
+            return Ok(messages);
+        }
 }
