@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, useTheme, Paper, CardActionArea, Link } from '@mui/material';
+import { Typography, Grid, useTheme, Paper, CardActionArea } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom'; // Import the Link component from react-router-dom
 
 const Portal = () => {
@@ -7,10 +7,6 @@ const Portal = () => {
 
   const cardStyle = {
     height: '20vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[8], // Using theme-based shadow
     transition: theme.transitions.create(['box-shadow', 'transform'], {
@@ -24,6 +20,15 @@ const Portal = () => {
     color: 'inherit',
   };
 
+  const contentStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    height: '100%',
+  };
+
   return (
     <div style={{ padding: theme.spacing(3) }}>
       <Typography variant="h3" component="h1" gutterBottom>
@@ -32,7 +37,7 @@ const Portal = () => {
       <Grid container spacing={theme.spacing(2)}>
         <Grid item xs={12} sm={6} md={4}>
           <CardActionArea component={RouterLink} to="/ervaringsdeskundigen-portal" sx={cardStyle}>
-            <Paper elevation={4} sx={{ height: '100%', width: '100%' }}>
+            <Paper elevation={4} sx={contentStyle}>
               <Typography gutterBottom variant="h5" component="div">
                 Ervaringsdeskundigenportal
               </Typography>
@@ -44,7 +49,7 @@ const Portal = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <CardActionArea component={RouterLink} to="/bedrijfsportal" sx={cardStyle}>
-            <Paper elevation={4} sx={{ height: '100%', width: '100%' }}>
+            <Paper elevation={4} sx={contentStyle}>
               <Typography gutterBottom variant="h5" component="div">
                 Bedrijfsportal
               </Typography>
@@ -56,7 +61,7 @@ const Portal = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <CardActionArea component={RouterLink} to="/beheerdersportal" sx={cardStyle}>
-            <Paper elevation={4} sx={{ height: '100%', width: '100%' }}>
+            <Paper elevation={4} sx={contentStyle}>
               <Typography gutterBottom variant="h5" component="div">
                 Beheerdersportal
               </Typography>
