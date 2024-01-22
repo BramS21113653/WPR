@@ -87,15 +87,30 @@ public class ChatController : ControllerBase
         return Ok(chats);
     }
 
-        [HttpGet("getMessagesByResearch")]
-        public async Task<IActionResult> GetMessagesByResearch(Guid researchId)
-        {
-            var messages = await _context.Chats
-                                    .Include(c => c.Messages)
-                                    .Where(c => c.ResearchId == researchId)
-                                    .SelectMany(c => c.Messages)
-                                    .ToListAsync();
+    [HttpGet("getMessagesByResearch")]
+    public async Task<IActionResult> GetMessagesByResearch(Guid researchId)
+    {
+        var messages = await _context.Chats
+                                .Include(c => c.Messages)
+                                .Where(c => c.ResearchId == researchId)
+                                .SelectMany(c => c.Messages)
+                                .ToListAsync();
 
-            return Ok(messages);
+        return Ok(messages);
+    }
+
+    [HttpGet("findChatId")]
+    public async Task<IActionResult> FindOrCreateChatId(Guid panelMemberId, Guid researchId, Guid businessUserId)
+    {
+        var chat = await _context.Chats
+            .FirstOrDefaultAsync(c => c.PanelMemberId == panelMemberId && c.ResearchId == researchId);
+
+        if (chat == null)
+        {
+            // Chat niet gevonden, dus maak een nieuwe
+            chat = await _chatService.CreateChat(panelMemberId, businessUserId, researchId);
         }
+
+        return Ok(new { chatId = chat.Id });
+    }
 }
