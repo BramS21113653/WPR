@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const ChatComponent = ({ researchId, businessUserId, handleClose }) => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [socket, setSocket] = useState(null);
+const ChatComponentBusinessUser = ({ researchId, businessUserId, handleClose }) => {
+ const [messages, setMessages] = useState([]);
+ const [newMessage, setNewMessage] = useState('');
+ const socket = useRef(null);
 
-  useEffect(() => {
+ useEffect(() => {
     const token = localStorage.getItem('jwtToken');
     const userId = localStorage.getItem('userId');
 
@@ -14,49 +14,55 @@ const ChatComponent = ({ researchId, businessUserId, handleClose }) => {
       return;
     }
 
-    const ws = new WebSocket(`wss://localhost:3001/chat?userId=${userId}&researchId=${researchId}&businessUserId=${businessUserId}`);
+    socket.current = new WebSocket(`wss://localhost:3001/chat?userId=${userId}&researchId=${researchId}&businessUserId=${businessUserId}`);
 
-    ws.onopen = () => {
+    socket.current.onopen = () => {
       console.log('WebSocket verbonden');
     };
 
-    ws.onmessage = (event) => {
+    socket.current.onmessage = (event) => {
       const message = JSON.parse(event.data);
       setMessages(prevMessages => [...prevMessages, message]);
     };
 
-    ws.onerror = (error) => {
+    socket.current.onerror = (error) => {
       console.error('WebSocket-fout:', error);
     };
 
-    ws.onclose = () => {
+    socket.current.onclose = () => {
       console.log('WebSocket verbinding gesloten');
     };
 
-    setSocket(ws);
+    return () => {
+      if (socket.current) {
+        socket.current.close();
+      }
+    };
+ }, [researchId, businessUserId]);
 
-    return () => ws.close();
-  }, [researchId, businessUserId]);
-
-  const handleSendMessage = () => {
-    if (!socket) {
-      console.error('Geen WebSocket-verbinding');
-      return;
+ const handleSendMessage = () => {
+    if (!socket.current) {
+        console.error('Geen WebSocket-verbinding');
+        return;
     }
 
     const messageData = {
-      type: 'message',
-      content: newMessage,
-      senderId: localStorage.getItem('userId'),
-      researchId,
-      businessUserId
+        type: 'message',
+        content: newMessage,
+        senderId: localStorage.getItem('userId'),
+        researchId: researchId,  // Ensure this is the correct research ID
+        businessUserId: businessUserId
     };
 
-    socket.send(JSON.stringify(messageData));
-    setNewMessage(''); // Clear the input field after sending
-  };
+    try {
+        socket.current.send(JSON.stringify(messageData));
+        setNewMessage(''); // Clear the input field after sending
+    } catch (error) {
+        console.error('Error sending message:', error);
+    }
+};
 
-  return (
+ return (
     <div style={{ border: '1px solid gray', padding: '10px', margin: '10px' }}>
       <div style={{ height: '300px', overflowY: 'scroll', marginBottom: '10px' }}>
         {messages.map((message, index) => (
@@ -79,7 +85,7 @@ const ChatComponent = ({ researchId, businessUserId, handleClose }) => {
         Sluit Chat
       </button>
     </div>
-  );
+ );
 };
 
-export default ChatComponent;
+export default ChatComponentBusinessUser;

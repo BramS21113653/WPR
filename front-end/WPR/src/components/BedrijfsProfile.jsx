@@ -3,7 +3,7 @@ import { Modal, Box, Typography, TextField, Button, Select, MenuItem, FormContro
 import { API_BASE_URL } from './../../apiConfig';
 import { UserContext } from './../UserContext';
 import Collapse from '@mui/material/Collapse';
-import ChatComponent from './ChatComponentBusinessUser';
+import ChatComponentBusinessUser from './ChatComponentBusinessUser';
 
 const BusinessUserProfile = () => {
   const [businessUserData, setBusinessUserData] = useState({
@@ -219,9 +219,9 @@ const fetchResearches = async (conductorId) => {
   };
 
   const handleOpenChatModal = (researchId) => {
-    setSelectedResearchId(researchId);
+    setSelectedResearchId(researchId); // Set selectedResearchId
     setChatModalOpen(true);
-  };
+   };   
 
   const handleCloseChatModal = () => {
     setChatModalOpen(false);
@@ -233,12 +233,12 @@ const fetchResearches = async (conductorId) => {
       <Typography variant="h6">Berichten/feedback van ervaringsdeskundigen per onderzoek</Typography>
       {/* Conditionally render ChatComponent */}
       {showChat && (
-        <ChatComponent
-          researchId={selectedResearchId}
-          businessUserId={businessUserData.id}
-          handleClose={() => setShowChat(false)}
-        />
-      )}
+ <ChatComponentBusinessUser
+    researchId={selectedResearchId}
+    businessUserId={businessUserData.id}
+    handleClose={() => setShowChat(false)}
+ />
+)}
 
       <div>
       <Grid container spacing={2}>
