@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { UserContext } from '../../UserContext';
 import { useNavigate } from 'react-router-dom'; 
 import { API_BASE_URL } from '../../../apiConfig';
+import './Inloggen.css';
 
 const Inloggen = () => {
  const { setUser } = useContext(UserContext);
